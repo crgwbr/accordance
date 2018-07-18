@@ -1,6 +1,6 @@
 {
   "name": "accordance",
-  "version": "0.1.1",
+  "version": "0.1.2",
   "description": "A wrapper around unison to provide cross-platform, automatic, bidirectional file syncing",
   "main": "./dist/main.js",
   "types": "./dist/main.d.ts",
