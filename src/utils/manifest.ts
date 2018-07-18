@@ -7,10 +7,6 @@ const NodePackageManifest = t.type({
     name: t.string,
     version: t.string,
     description: t.string,
-    main: t.string,
-    repository: t.string,
-    author: t.string,
-    license: t.string,
 });
 
 
