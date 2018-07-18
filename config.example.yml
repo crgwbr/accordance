@@ -1,0 +1,46 @@
+---
+# Name of the Unison profile to create. This becomes
+name: projects
+
+# Info regarding the local directory you'd like to sync to remote
+local:
+  root: ~/Projects/
+
+
+# Info regarding the remote directory you'd like to sync to local
+remote:
+  host: myserver.com
+  root: ~/Projects/
+
+# In the event of a conflict, which version should win? Must be set to either `local` or `remote`.
+prefer: local
+
+# Optional: list of files, paths, and patterns to ignore.
+syncIgnore:
+  # Ignore OS X garbage
+  - Name .DS_Store
+
+  # Ignore Unison's temporary files
+  - Name *.unison.tmp
+
+  # Ignore node_modules directories
+  - Name node_modules
+
+  # Ignore .tox virtual environments
+  - Name .tox
+
+  # Ignore Python stuff
+  - Name __pycache__
+  - Name .eggs
+  - Name .egg
+  - Name site-packages
+  - Name lib64/
+  - Name parts/
+  - Name sdist/
+  - Name var/
+
+# Other misc options padded through into the unison config file
+options:
+  auto: true
+  batch: true
+  confirmbigdel: true
