@@ -6,7 +6,7 @@
   "types": "./dist/main.d.ts",
   "scripts": {
     "preversion": "yarn run lint",
-    "version": "yarn run build && git add --all && git commit --allow-empty -m 'Built dist/'",
+    "version": "yarn run build && git add --all",
     "postversion": "git push && git push --tags",
     "lint": "tslint --project tsconfig.json",
     "build": "tsc -p tsconfig.json"
