@@ -1,7 +1,22 @@
 #!/usr/bin/env node
 "use strict";
+var __read = (this && this.__read) || function (o, n) {
+    var m = typeof Symbol === "function" && o[Symbol.iterator];
+    if (!m) return o;
+    var i = m.call(o), r, ar = [], e;
+    try {
+        while ((n === void 0 || n-- > 0) && !(r = i.next()).done) ar.push(r.value);
+    }
+    catch (error) { e = { error: error }; }
+    finally {
+        try {
+            if (r && !r.done && (m = i["return"])) m.call(i);
+        }
+        finally { if (e) throw e.error; }
+    }
+    return ar;
+};
 Object.defineProperty(exports, "__esModule", { value: true });
-var tslib_1 = require("tslib");
 var os = require("os");
 var path = require("path");
 var childProcess = require("child_process");
@@ -163,7 +178,7 @@ var AccordCLI = /** @class */ (function () {
                 console.log("REMOTE: " + line);
                 return;
             }
-            var _a = tslib_1.__read(JSON.parse(command[1]), 3), source = _a[0], eventType = _a[1], filePath = _a[2];
+            var _a = __read(JSON.parse(command[1]), 3), source = _a[0], eventType = _a[1], filePath = _a[2];
             self.queueSync(config, source, eventType, filePath);
         };
         remote_1.getConnection(sshConfig, function (conn) {

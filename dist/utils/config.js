@@ -1,6 +1,15 @@
 "use strict";
+var __values = (this && this.__values) || function (o) {
+    var m = typeof Symbol === "function" && o[Symbol.iterator], i = 0;
+    if (m) return m.call(o);
+    return {
+        next: function () {
+            if (o && i >= o.length) o = void 0;
+            return { value: o && o[i++], done: !o };
+        }
+    };
+};
 Object.defineProperty(exports, "__esModule", { value: true });
-var tslib_1 = require("tslib");
 var os = require("os");
 var path = require("path");
 var yaml = require("js-yaml");
@@ -111,7 +120,7 @@ exports.buildUnisonConfig = function (config) {
     // Add other misc options
     if (config.options) {
         try {
-            for (var _b = tslib_1.__values(Object.keys(config.options)), _c = _b.next(); !_c.done; _c = _b.next()) {
+            for (var _b = __values(Object.keys(config.options)), _c = _b.next(); !_c.done; _c = _b.next()) {
                 var opt = _c.value;
                 lines.push(_buildUnisonConfigLine(opt, config.options[opt]));
             }
