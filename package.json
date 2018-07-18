@@ -1,6 +1,6 @@
 {
   "name": "accordance",
-  "version": "0.1.0",
+  "version": "0.1.1",
   "description": "A wrapper around unison to provide cross-platform, automatic, bidirectional file syncing",
   "main": "./dist/main.js",
   "types": "./dist/main.d.ts",
@@ -16,7 +16,7 @@
   "license": "ISC",
   "private": false,
   "bin": {
-    "accordance" : "./dist/main.js"
+    "accordance": "./dist/main.js"
   },
   "devDependencies": {
     "@types/chokidar": "^1.7.5",
