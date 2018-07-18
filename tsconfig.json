@@ -8,7 +8,7 @@
         "downlevelIteration": true,
         "esModuleInterop": false,
         "forceConsistentCasingInFileNames": true,
-        "importHelpers": true,
+        "importHelpers": false,
         "inlineSources": true,
         "module": "commonjs",
         "moduleResolution": "node",
