@@ -7,10 +7,6 @@ var NodePackageManifest = t.type({
     name: t.string,
     version: t.string,
     description: t.string,
-    main: t.string,
-    repository: t.string,
-    author: t.string,
-    license: t.string,
 });
 exports.getPackageInfo = function () {
     var manifestPath = path.normalize(path.join(__dirname, '..', '..', 'package.json'));
