@@ -6,6 +6,24 @@ Accordance is a wrapper script around the [Unison file synchronizer](http://www.
 
 Unison is much like [rsync](https://en.wikipedia.org/wiki/Rsync), except that it sync's files bi-directionally instead of unidirectionally. This makes it ideal for use-cases like synchronizing a VCS (like Git) repository's working copy to a remote server during development.
 
+## Why do I need this?
+
+While traveling, I typically bring a 12" MacBook to save weight. This machine is perfectly capable of running Sublime Text, but it doesn't have nearly enough RAM or CPU power to run my full development stack (Django Dev Server, Webpack Dev Server, Postgres, Redis, etc all in Docker). Thus, I run all of that on a must faster development server in my office. This is a fairly common pattern in web development: run your editor (Sublime, TextMate, VS Code, etc) and other development tools on your local workstation, but run server software on a remote development server. The question is: how do you share files between the local workstation and the remote server?
+
+There are several ways you could approach this problem.
+
+1. **Dropbox**: Proprietary, commercial, and can be slow for a file change to make it to the remote server.
+2. **NFS**: Somewhat complex to set-up. INOTIFY events don't travel over NFS, so development servers and watching-compliers have to poll file stats to know when something changed.
+3. **Rsync**: Easy to get working, but it only syncs files one-direction. Doesn't have a watch mode, so you need to run it manually after each save.
+4. **Unison**: Bad documentation, but a great tool. Syncs files bi-directionally. Supports watching files, but needs an adapter like [unox](https://github.com/hnsl/unox) to do so. Unox itself doesn't support ignoring file patterns, so it's terribly slow when watching anything with a `node_modules` directory.
+
+After trying and being dissatisfied with each of these, I decided to write a tool to make this better: ***Accordance***.
+
+![](overview.png)
+
+Accordance is a wrapper around Unison. It solves the problem of watching files and triggering syncs. Whether the change happens on the local system (e.g. saving a file in your editor) or on the remote (e.g. creating a new Django migration file), Accordance will detect the change and tell Unison to sync the directory in which the change occurred. This results in a fairly hassle-free background file-synchronizer that performs better (syncs faster) than the alternatives *and* doesn't break INOTIFY listeners on the remote machine.
+
+
 ## Getting Started
 
 The following guide assumes you have two systems, each running either OS X or Ubuntu Linux. One of those system's will be referred to as the local system (this is the system your using now). The other will be called the remote system (this is the system you'd like to sync files to and from, probably a server somewhere on the Internet).
@@ -26,7 +44,7 @@ $ apt-get update && apt-get install unison
 
 Note: the same version of Unison should be install on both systems.
 
-Next, if the hostname of either machine ever changes (this is normally only the case for the local system, it it's a portable device like a laptop), add an environment variable to your `~/.bashrc` file to set a consistant system hostname for Unison:
+Next, if the hostname of either machine ever changes (this is normally only the case for the local system, if it's a portable device like a laptop), add an environment variable to your `~/.bashrc` file to set a consistant system hostname for Unison:
 
 ```bash
 echo 'export UNISONLOCALHOSTNAME="MYLOCALSYSTEM"' >> ~/.bashrc
