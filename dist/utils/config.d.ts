@@ -9,12 +9,15 @@ declare const AccordanceConfig: t.IntersectionType<[t.InterfaceType<{
         root: t.StringType;
     }>, t.mixed>;
     remote: t.InterfaceType<{
+        username: t.StringType;
         host: t.StringType;
         root: t.StringType;
     }, t.TypeOfProps<{
+        username: t.StringType;
         host: t.StringType;
         root: t.StringType;
     }>, t.OutputOfProps<{
+        username: t.StringType;
         host: t.StringType;
         root: t.StringType;
     }>, t.mixed>;
@@ -29,12 +32,15 @@ declare const AccordanceConfig: t.IntersectionType<[t.InterfaceType<{
         root: t.StringType;
     }>, t.mixed>;
     remote: t.InterfaceType<{
+        username: t.StringType;
         host: t.StringType;
         root: t.StringType;
     }, t.TypeOfProps<{
+        username: t.StringType;
         host: t.StringType;
         root: t.StringType;
     }>, t.OutputOfProps<{
+        username: t.StringType;
         host: t.StringType;
         root: t.StringType;
     }>, t.mixed>;
@@ -49,12 +55,15 @@ declare const AccordanceConfig: t.IntersectionType<[t.InterfaceType<{
         root: t.StringType;
     }>, t.mixed>;
     remote: t.InterfaceType<{
+        username: t.StringType;
         host: t.StringType;
         root: t.StringType;
     }, t.TypeOfProps<{
+        username: t.StringType;
         host: t.StringType;
         root: t.StringType;
     }>, t.OutputOfProps<{
+        username: t.StringType;
         host: t.StringType;
         root: t.StringType;
     }>, t.mixed>;
@@ -81,12 +90,15 @@ declare const AccordanceConfig: t.IntersectionType<[t.InterfaceType<{
         root: t.StringType;
     }>, t.mixed>;
     remote: t.InterfaceType<{
+        username: t.StringType;
         host: t.StringType;
         root: t.StringType;
     }, t.TypeOfProps<{
+        username: t.StringType;
         host: t.StringType;
         root: t.StringType;
     }>, t.OutputOfProps<{
+        username: t.StringType;
         host: t.StringType;
         root: t.StringType;
     }>, t.mixed>;
@@ -105,12 +117,15 @@ declare const AccordanceConfig: t.IntersectionType<[t.InterfaceType<{
         root: t.StringType;
     }>, t.mixed>;
     remote: t.InterfaceType<{
+        username: t.StringType;
         host: t.StringType;
         root: t.StringType;
     }, t.TypeOfProps<{
+        username: t.StringType;
         host: t.StringType;
         root: t.StringType;
     }>, t.OutputOfProps<{
+        username: t.StringType;
         host: t.StringType;
         root: t.StringType;
     }>, t.mixed>;
@@ -131,12 +146,15 @@ export declare const readConfig: (configPath: string, encoding?: string) => t.Ty
         root: t.StringType;
     }>, t.mixed>;
     remote: t.InterfaceType<{
+        username: t.StringType;
         host: t.StringType;
         root: t.StringType;
     }, t.TypeOfProps<{
+        username: t.StringType;
         host: t.StringType;
         root: t.StringType;
     }>, t.OutputOfProps<{
+        username: t.StringType;
         host: t.StringType;
         root: t.StringType;
     }>, t.mixed>;
@@ -157,12 +175,15 @@ export declare const getUnisonConfigPath: (config: t.TypeOfProps<{
         root: t.StringType;
     }>, t.mixed>;
     remote: t.InterfaceType<{
+        username: t.StringType;
         host: t.StringType;
         root: t.StringType;
     }, t.TypeOfProps<{
+        username: t.StringType;
         host: t.StringType;
         root: t.StringType;
     }>, t.OutputOfProps<{
+        username: t.StringType;
         host: t.StringType;
         root: t.StringType;
     }>, t.mixed>;
@@ -182,12 +203,15 @@ export declare const buildUnisonConfig: (config: t.TypeOfProps<{
         root: t.StringType;
     }>, t.mixed>;
     remote: t.InterfaceType<{
+        username: t.StringType;
         host: t.StringType;
         root: t.StringType;
     }, t.TypeOfProps<{
+        username: t.StringType;
         host: t.StringType;
         root: t.StringType;
     }>, t.OutputOfProps<{
+        username: t.StringType;
         host: t.StringType;
         root: t.StringType;
     }>, t.mixed>;
@@ -207,12 +231,15 @@ export declare const writeUnisonConfigFile: (config: t.TypeOfProps<{
         root: t.StringType;
     }>, t.mixed>;
     remote: t.InterfaceType<{
+        username: t.StringType;
         host: t.StringType;
         root: t.StringType;
     }, t.TypeOfProps<{
+        username: t.StringType;
         host: t.StringType;
         root: t.StringType;
     }>, t.OutputOfProps<{
+        username: t.StringType;
         host: t.StringType;
         root: t.StringType;
     }>, t.mixed>;

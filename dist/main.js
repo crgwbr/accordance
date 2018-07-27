@@ -164,7 +164,7 @@ var AccordCLI = /** @class */ (function () {
         var sshConfig = {
             host: config.remote.host,
             port: 22,
-            username: os.userInfo().username,
+            username: config.remote.username || os.userInfo().username,
             agent: sshAgentSock,
         };
         var cmd = ['accordance', 'watch', config.remote.root];
