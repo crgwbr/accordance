@@ -169,3 +169,14 @@ The following limitations currently apply:
     2. SSH Agent is the only supported authentication mechanism. The path to the SSH Agent socket must be set in the `SSH_AUTH_SOCK` environment variable and the private key must already be loaded into the agent (via `ssh-add`)
 
 These limitation are not design decisions, just limitations of the current implementation. They may be improved in future versions of Accordance.
+
+
+## Change Log
+
+### 0.2.0 (*2018-07-27*)
+
+- Added remote username as a mandatory field in the config file.
+
+### 0.1.6 (*2018-07-19*)
+
+- Initial Release.
