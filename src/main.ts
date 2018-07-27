@@ -220,7 +220,7 @@ class AccordCLI {
         const sshConfig: ConnectConfig = {
             host: config.remote.host,
             port: 22,
-            username: os.userInfo().username,
+            username: config.remote.username || os.userInfo().username,
             agent: sshAgentSock,
         };
         const cmd = ['accordance', 'watch', config.remote.root];

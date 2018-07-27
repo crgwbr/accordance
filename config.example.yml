@@ -9,6 +9,7 @@ local:
 
 # Info regarding the remote directory you'd like to sync to local
 remote:
+  username: crgwbr
   host: myserver.com
   root: ~/Projects/
 

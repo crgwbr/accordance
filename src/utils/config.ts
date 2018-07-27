@@ -12,6 +12,7 @@ const AccordanceConfigBase = t.type({
         root: t.string,
     }),
     remote: t.type({
+        username: t.string,
         host: t.string,
         root: t.string,
     }),

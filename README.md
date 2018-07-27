@@ -97,6 +97,7 @@ local:
 
 # Info regarding the remote directory you'd like to sync to local
 remote:
+  username: crgwbr
   host: myserver.com
   root: ~/Projects/
 
@@ -165,7 +166,6 @@ The following limitations currently apply:
 
 1. The local system must be able to SSH into the remote system. This is necessary for both FSEvent / INOTIFY monitoring and unison file syncing.
     1. The SSH connection must be over port 22.
-    2. The remote username must be the same as the local system username.
-    3. SSH Agent is the only supported authentication mechanism. The path to the SSH Agent socket must be set in the `SSH_AUTH_SOCK` environment variable and the private key must already be loaded into the agent (via `ssh-add`)
+    2. SSH Agent is the only supported authentication mechanism. The path to the SSH Agent socket must be set in the `SSH_AUTH_SOCK` environment variable and the private key must already be loaded into the agent (via `ssh-add`)
 
 These limitation are not design decisions, just limitations of the current implementation. They may be improved in future versions of Accordance.
