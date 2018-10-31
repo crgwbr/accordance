@@ -173,6 +173,10 @@ These limitation are not design decisions, just limitations of the current imple
 
 ## Change Log
 
+### 0.3.0 (*2018-10-31*)
+
+- Improve sync performance by removing redundant directories from the sync-queue when adding a new directory.
+
 ### 0.2.0 (*2018-07-27*)
 
 - Added remote username as a mandatory field in the config file.
