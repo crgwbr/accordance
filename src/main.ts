@@ -19,19 +19,9 @@ import {
     makeGreen,
     registerCleanupFn,
 } from './utils/cli';
+import {SyncQueue} from './utils/queue';
 import {buildWatcher} from './utils/watch';
 import {getConnection} from './utils/remote';
-
-
-/**
- * Interface of an entry in the unison sync queue
- */
-interface ISyncQueueEntry {
-    config: IAccordanceConfig;
-    source: string;
-    eventType: string;
-    directory: string;
-}
 
 
 class AccordCLI {
@@ -39,17 +29,17 @@ class AccordCLI {
     /**
      * CLI argument string
      */
-    private argv: string[];
+    private readonly argv: string[];
+
+    /**
+     * Queue of directories that need sync'd. Will be processed in FIFO order.
+     */
+    private readonly syncQueue = new SyncQueue(() => { this.runSync(); });
 
     /**
      * True when unison sync process is running. Used to prevent multiple sync processes from running concurrently.
      */
     private syncIsRunning: boolean = false;
-
-    /**
-     * Queue of directories that need sync'd. Will be processed in FIFO order.
-     */
-    private syncQueue: ISyncQueueEntry[] = [];
 
     /**
      * SSH connection to the remote host. Used to listen for remote INOTIFY events.
@@ -236,7 +226,7 @@ class AccordCLI {
                 return;
             }
             const [source, eventType, filePath] = (JSON.parse(command[1]) as string[]);
-            self.queueSync(config, source, eventType, filePath);
+            self.syncQueue.queue(config, source, eventType, filePath);
         };
 
         getConnection(sshConfig, (conn) => {
@@ -285,53 +275,16 @@ class AccordCLI {
             console.log(`Finished initial scan. Watching ${fileCount} files in ${dirs.length} directories.`);
 
             // Run initial sync
-            self.queueSync(config, 'local', 'initial', '.');
+            self.syncQueue.queue(config, 'local', 'initial', '.');
         });
 
         // React to FS changes
         watcher.on('all', (eventType: string, filePath: string) => {
             const relPath = path.relative(config.local.root, filePath);
-            self.queueSync(config, 'local', eventType, relPath);
+            self.syncQueue.queue(config, 'local', eventType, relPath);
         });
 
         this.localWatcher = watcher;
-    }
-
-
-    private queueSync (config: IAccordanceConfig, source: string, eventType: string, filePath: string) {
-        const dir = path.dirname(filePath);
-        const existing = this.syncQueue
-            .filter((e) => {
-                return e.directory === dir;
-            });
-        if (existing.length > 0) {
-            return;
-        }
-
-        // If the sync queue if getting huge, wipe it a sync everything
-        if (this.syncQueue.length > 50) {
-            const msg = `${source.toUpperCase()}: ${eventType} ${filePath}`;
-            console.log(makeGreen(msg));
-            this.syncQueue = [
-                {
-                    config: config,
-                    source: source,
-                    eventType: 'overflow',
-                    directory: '.',
-                }
-            ];
-            this.runSync();
-        }
-
-        // Otherwise, just queue the sync
-        console.log(makeGreen(`QUEUE: Detected ${eventType} to ${filePath} on ${source}`));
-        this.syncQueue.push({
-            config: config,
-            source: source,
-            eventType: eventType,
-            directory: dir,
-        });
-        this.runSync();
     }
 
 
@@ -356,7 +309,7 @@ class AccordCLI {
         }
 
         // Figure out what to sync
-        const queueEntry = this.syncQueue.shift();
+        const queueEntry = this.syncQueue.dequeue();
         if (!queueEntry) {
             return;
         }
@@ -403,7 +356,7 @@ class AccordCLI {
                     console.log(makeRed(`Unison exited with code ${code}`));
                 }
                 // If more sync actions were requested while this sync was running, run sync again.
-                if (self.syncQueue.length > 0) {
+                if (self.syncQueue.size() > 0) {
                     setImmediate(() => {
                         self.runSync();
                     });
