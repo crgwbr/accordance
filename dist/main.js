@@ -25,6 +25,7 @@ var readline = require("readline");
 var manifest_1 = require("./utils/manifest");
 var config_1 = require("./utils/config");
 var cli_1 = require("./utils/cli");
+var queue_1 = require("./utils/queue");
 var watch_1 = require("./utils/watch");
 var remote_1 = require("./utils/remote");
 var AccordCLI = /** @class */ (function () {
@@ -32,14 +33,15 @@ var AccordCLI = /** @class */ (function () {
      * Constructor. Initialize the class with an argv string array.
      */
     function AccordCLI(argv) {
+        var _this = this;
+        /**
+         * Queue of directories that need sync'd. Will be processed in FIFO order.
+         */
+        this.syncQueue = new queue_1.SyncQueue(function () { _this.runSync(); });
         /**
          * True when unison sync process is running. Used to prevent multiple sync processes from running concurrently.
          */
         this.syncIsRunning = false;
-        /**
-         * Queue of directories that need sync'd. Will be processed in FIFO order.
-         */
-        this.syncQueue = [];
         this.argv = argv;
     }
     /**
@@ -179,7 +181,7 @@ var AccordCLI = /** @class */ (function () {
                 return;
             }
             var _a = __read(JSON.parse(command[1]), 3), source = _a[0], eventType = _a[1], filePath = _a[2];
-            self.queueSync(config, source, eventType, filePath);
+            self.syncQueue.queue(config, source, eventType, filePath);
         };
         remote_1.getConnection(sshConfig, function (conn) {
             self.sshClient = conn;
@@ -218,47 +220,14 @@ var AccordCLI = /** @class */ (function () {
             }, 0);
             console.log("Finished initial scan. Watching " + fileCount + " files in " + dirs.length + " directories.");
             // Run initial sync
-            self.queueSync(config, 'local', 'initial', '.');
+            self.syncQueue.queue(config, 'local', 'initial', '.');
         });
         // React to FS changes
         watcher.on('all', function (eventType, filePath) {
             var relPath = path.relative(config.local.root, filePath);
-            self.queueSync(config, 'local', eventType, relPath);
+            self.syncQueue.queue(config, 'local', eventType, relPath);
         });
         this.localWatcher = watcher;
-    };
-    AccordCLI.prototype.queueSync = function (config, source, eventType, filePath) {
-        var dir = path.dirname(filePath);
-        var existing = this.syncQueue
-            .filter(function (e) {
-            return e.directory === dir;
-        });
-        if (existing.length > 0) {
-            return;
-        }
-        // If the sync queue if getting huge, wipe it a sync everything
-        if (this.syncQueue.length > 50) {
-            var msg = source.toUpperCase() + ": " + eventType + " " + filePath;
-            console.log(cli_1.makeGreen(msg));
-            this.syncQueue = [
-                {
-                    config: config,
-                    source: source,
-                    eventType: 'overflow',
-                    directory: '.',
-                }
-            ];
-            this.runSync();
-        }
-        // Otherwise, just queue the sync
-        console.log(cli_1.makeGreen("QUEUE: Detected " + eventType + " to " + filePath + " on " + source));
-        this.syncQueue.push({
-            config: config,
-            source: source,
-            eventType: eventType,
-            directory: dir,
-        });
-        this.runSync();
     };
     AccordCLI.prototype.getWatchIgnorePatterns = function (config) {
         var watchIgnorePatterns = [];
@@ -277,7 +246,7 @@ var AccordCLI = /** @class */ (function () {
             return;
         }
         // Figure out what to sync
-        var queueEntry = this.syncQueue.shift();
+        var queueEntry = this.syncQueue.dequeue();
         if (!queueEntry) {
             return;
         }
@@ -319,7 +288,7 @@ var AccordCLI = /** @class */ (function () {
                     console.log(cli_1.makeRed("Unison exited with code " + code));
                 }
                 // If more sync actions were requested while this sync was running, run sync again.
-                if (self.syncQueue.length > 0) {
+                if (self.syncQueue.size() > 0) {
                     setImmediate(function () {
                         self.runSync();
                     });
