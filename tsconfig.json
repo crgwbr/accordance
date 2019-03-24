@@ -10,6 +10,9 @@
         "forceConsistentCasingInFileNames": true,
         "importHelpers": false,
         "inlineSources": true,
+        "lib": [
+            "es2015"
+        ],
         "module": "commonjs",
         "moduleResolution": "node",
         "newLine": "lf",

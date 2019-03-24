@@ -6,6 +6,11 @@ export const makeRed = function(txt: string) {
 };
 
 
+export const makeYellow = function(txt: string) {
+    return colors.yellow(txt);
+};
+
+
 export const makeGreen = function(txt: string) {
     return colors.green(txt);
 };

@@ -7,7 +7,7 @@ import program = require('commander');
 import readline = require('readline');
 import {ConnectConfig, Client, ClientChannel} from 'ssh2';
 import {FSWatcher} from 'chokidar';
-import {getPackageInfo} from './utils/manifest';
+import {getPackageInfo, checkForUpdates} from './utils/manifest';
 import {
     IAccordanceConfig,
     readConfig,
@@ -16,6 +16,7 @@ import {
 } from './utils/config';
 import {
     makeRed,
+    makeYellow,
     makeGreen,
     registerCleanupFn,
 } from './utils/cli';
@@ -70,9 +71,19 @@ class AccordCLI {
      *
      * Parses and validates command line options and then dispatches the appropriate action.
      */
-    public run() {
+    public async run() {
         const self = this;
         const pkg = getPackageInfo();
+
+        // Check for outdated pkg
+        const updateInfo = await checkForUpdates();
+        if (updateInfo.isOutdated) {
+            console.warn(makeYellow(
+                `You have ${updateInfo.name} version ${updateInfo.current} installed. The latest is ${updateInfo.latest}.\n` +
+                `Run \`npm -g install ${updateInfo.name}\` to upgrade.\n`
+            ));
+        }
+
         // Setup basic CLI info
         program
             .version(pkg.version);
@@ -300,79 +311,86 @@ class AccordCLI {
     }
 
 
-    private runSync () {
+    private runSync (queueEntry?: ISyncQueueEntry) {
         const self = this;
+        return new Promise<void>((resolve, reject) => {
+            // Use locking to make sure we only run one sync at a time
+            if (this.syncIsRunning) {
+                return;
+            }
 
-        // Use locking to make sure we only run one sync at a time
-        if (this.syncIsRunning) {
-            return;
-        }
+            // Figure out what to sync
+            if (!queueEntry) {
+                queueEntry = this.syncQueue.dequeue();
+            }
+            if (!queueEntry) {
+                return;
+            }
 
-        // Figure out what to sync
-        const queueEntry = this.syncQueue.dequeue();
-        if (!queueEntry) {
-            return;
-        }
+            self.syncIsRunning = true;
+            try {
+                console.log(makeGreen(`SYNCING: ${queueEntry.directory}`));
+                const child = childProcess.spawn('unison', [queueEntry.config.name, '-path', queueEntry.directory]);
 
-        // Run the sync
-        this.syncIsRunning = true;
-        try {
-            console.log(makeGreen(`SYNCING: ${queueEntry.directory}`));
-            const child = childProcess.spawn('unison', [queueEntry.config.name, '-path', queueEntry.directory]);
+                const writeLines = function(stream: NodeJS.WritableStream, data: string | Buffer) {
+                    const lines = data
+                        .toString()
+                        .split('\n')
+                        .map((line) => {
+                            if (!line || line === '\n' || line === '\r') {
+                                return line;
+                            }
+                            if (line.indexOf('\r') !== -1) {
+                                return `\rUNISON: ${line.replace('\r', '')}`;
+                            }
+                            return `UNISON: ${line}`;
+                        })
+                        .join('\n');
+                    stream.write(lines);
+                };
 
-            const writeLines = function(stream: NodeJS.WritableStream, data: string | Buffer) {
-                const lines = data
-                    .toString()
-                    .split('\n')
-                    .map((line) => {
-                        if (!line || line === '\n' || line === '\r') {
-                            return line;
-                        }
-                        if (line.indexOf('\r') !== -1) {
-                            return `\rUNISON: ${line.replace('\r', '')}`;
-                        }
-                        return `UNISON: ${line}`;
-                    })
-                    .join('\n');
-                stream.write(lines);
-            };
+                // Pipe child process stdout to main process stdout
+                child.stdout.on('data', (data) => {
+                    writeLines(process.stdout, data);
+                });
 
-            // Pipe child process stdout to main process stdout
-            child.stdout.on('data', (data) => {
-                writeLines(process.stdout, data);
-            });
+                // Pipe child process stderr to main process stderr
+                child.stderr.on('data', (data) => {
+                    writeLines(process.stderr, data);
+                });
 
-            // Pipe child process stderr to main process stderr
-            child.stderr.on('data', (data) => {
-                writeLines(process.stderr, data);
-            });
-
-            // Handle sync finish
-            child.on('close', (code) => {
-                // Unset sync locks
+                // Handle sync finish
+                child.on('close', (code) => {
+                    // Unset sync locks
+                    self.syncIsRunning = false;
+                    // Log any errors
+                    if (code !== 0) {
+                        console.log(makeRed(`Unison exited with code ${code}`));
+                        reject(new Error(`Unison exited with code ${code}`));
+                        return;
+                    }
+                    // If more sync actions were requested while this sync was running, run sync again.
+                    if (self.syncQueue.size() > 0) {
+                        setImmediate(() => {
+                            self.runSync();
+                        });
+                    }
+                    // Resolve
+                    resolve();
+                });
+            } catch (e) {
+                console.error(e);
                 self.syncIsRunning = false;
-                // Log any errors
-                if (code !== 0) {
-                    console.log(makeRed(`Unison exited with code ${code}`));
-                }
-                // If more sync actions were requested while this sync was running, run sync again.
-                if (self.syncQueue.size() > 0) {
-                    setImmediate(() => {
-                        self.runSync();
-                    });
-                }
-            });
-        } catch (e) {
-            console.error(e);
-            self.syncIsRunning = false;
-        }
+                reject(e);
+            }
+        });
     }
 }
 
 
-const main = function(argv: string[]) {
+const main = async function(argv: string[]) {
     const cli = new AccordCLI(argv);
-    cli.run();
+    return cli.run();
 };
 
 
