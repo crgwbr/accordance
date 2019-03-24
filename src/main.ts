@@ -20,7 +20,7 @@ import {
     makeGreen,
     registerCleanupFn,
 } from './utils/cli';
-import {SyncQueue} from './utils/queue';
+import {ISyncQueueEntry, SyncQueue} from './utils/queue';
 import {buildWatcher} from './utils/watch';
 import {getConnection} from './utils/remote';
 
@@ -94,8 +94,10 @@ class AccordCLI {
         program
             .command('sync <configPath>')
             .description('Run bidirectional sync process with file watching.')
-            .action((configPath) => {
-                self.run__sync(configPath);
+            .option("--freq <seconds>", "How many seconds to wait between periodic full tree syncs", 30)
+            .action((configPath, options) => {
+                const freq = parseInt(options.freq, 10);
+                self.run__sync(configPath, freq);
             });
 
         // Setup remote watcher action. This command is ran over an SSH connection by the sync initiator. It doesn't
@@ -144,7 +146,7 @@ class AccordCLI {
      * 2. Watch remote FS (INOTIFY) events over an SSH connection.
      * 3. Queue / run syncs whenever a change is detected.
      */
-    private run__sync(configPath: string) {
+    private async run__sync(configPath: string, periodicSyncInterval: number) {
         const self = this;
 
         // Read the configuration file
@@ -153,14 +155,27 @@ class AccordCLI {
         // Create unison configuration file
         writeUnisonConfigFile(config);
 
+        // Run initial sync (and wait for it to finish before starting file watchers).
+        await this.runSync({
+            config: config,
+            source: 'local',
+            eventType: 'initial',
+            directory: '.',
+        });
+
         // Figure out which files to ignore
         const watchIgnorePatterns = this.getWatchIgnorePatterns(config);
 
         // Start local file watcher
-        this.watchLocal(config, watchIgnorePatterns);
+        await this.watchLocal(config, watchIgnorePatterns);
 
         // Start remote file watcher
         this.watchRemote(config, watchIgnorePatterns);
+
+        // Periodically trigger a full tree sync
+        setInterval(() => {
+            self.syncQueue.queue(config, 'local', 'periodic-sync', '.');
+        }, periodicSyncInterval * 1000);
 
         // Make sure that file watchers are closed when the process exits
         registerCleanupFn(() => {
@@ -215,7 +230,7 @@ class AccordCLI {
     }
 
 
-    private watchRemote (config: IAccordanceConfig, ignorePatterns: string[]) {
+    private async watchRemote (config: IAccordanceConfig, ignorePatterns: string[]) {
         const self = this;
         const sshAgentSock = process.env.SSH_AUTH_SOCK;
         const sshConfig: ConnectConfig = {
@@ -240,62 +255,72 @@ class AccordCLI {
             self.syncQueue.queue(config, source, eventType, filePath);
         };
 
-        getConnection(sshConfig, (conn) => {
-            self.sshClient = conn;
-            conn.exec(cmd.join(' '), { pty: true }, (err, stream) => {
-                if (err) {
-                    throw err;
-                }
+        const conn = await getConnection(sshConfig);
 
-                self.remoteWatcher = stream;
+        self.sshClient = conn;
 
-                // Buffer stdout and action on each line
-                const stdoutBuffer = readline.createInterface({ input: stream, });
-                stdoutBuffer.on('line', (line: string) => {
-                    handleRemoteOutputLine(line);
-                });
+        conn.exec(cmd.join(' '), { pty: true }, (err, stream) => {
+            if (err) {
+                throw err;
+            }
 
-                // Buffer stderr and log each line
-                const stderrBuffer = readline.createInterface({ input: stream.stderr, });
-                stderrBuffer.on('line', (line: string) => {
-                    console.log(makeRed(`REMOTE ERROR: ${line}`));
-                });
+            self.remoteWatcher = stream;
 
-                // Log connection close events
-                stream.on('close', (code: number, signal: number) => {
-                    console.log(makeRed(`Connection to remote was closed with code ${code}, signal: ${signal}`));
-                    conn.end();
-                });
+            // Buffer stdout and action on each line
+            const stdoutBuffer = readline.createInterface({ input: stream, });
+            stdoutBuffer.on('line', (line: string) => {
+                handleRemoteOutputLine(line);
             });
+
+            // Buffer stderr and log each line
+            const stderrBuffer = readline.createInterface({ input: stream.stderr, });
+            stderrBuffer.on('line', (line: string) => {
+                console.log(makeRed(`REMOTE ERROR: ${line}`));
+            });
+
+            // Log connection close events
+            stream.on('close', (code: number, signal: number) => {
+                console.log(makeRed(`Connection to remote was closed with code ${code}, signal: ${signal}`));
+                conn.end();
+            });
+        });
+
+        conn.on('close', () => {
+            console.log(makeRed(`Connection to remote was closed!`));
+        });
+        conn.on('end', () => {
+            console.log(makeRed(`Connection to remote was ended!`));
+        });
+        conn.on('error', () => {
+            console.log(makeRed(`Connection to remote encountered an error!`));
         });
     }
 
 
-    private watchLocal (config: IAccordanceConfig, ignorePatterns: string[]) {
+    private async watchLocal (config: IAccordanceConfig, ignorePatterns: string[]) {
         const self = this;
+        return new Promise((resolve) => {
+            console.log('Starting local file watchers...');
 
-        console.log('Starting local file watchers...');
+            const watcher = buildWatcher(config.local.root, ignorePatterns);
+            watcher.on('ready', () => {
+                const watches = watcher.getWatched();
+                const dirs = Object.keys(watches);
+                const fileCount = dirs.reduce((memo, dir) => {
+                    return memo + watches[dir].length;
+                }, 0);
+                console.log(`Finished initial scan. Watching ${fileCount} files in ${dirs.length} directories.`);
+                resolve(fileCount);
+            });
 
-        const watcher = buildWatcher(config.local.root, ignorePatterns);
-        watcher.on('ready', () => {
-            const watches = watcher.getWatched();
-            const dirs = Object.keys(watches);
-            const fileCount = dirs.reduce((memo, dir) => {
-                return memo + watches[dir].length;
-            }, 0);
-            console.log(`Finished initial scan. Watching ${fileCount} files in ${dirs.length} directories.`);
+            // React to FS changes
+            watcher.on('all', (eventType: string, filePath: string) => {
+                const relPath = path.relative(config.local.root, filePath);
+                self.syncQueue.queue(config, 'local', eventType, relPath);
+            });
 
-            // Run initial sync
-            self.syncQueue.queue(config, 'local', 'initial', '.');
+            this.localWatcher = watcher;
         });
-
-        // React to FS changes
-        watcher.on('all', (eventType: string, filePath: string) => {
-            const relPath = path.relative(config.local.root, filePath);
-            self.syncQueue.queue(config, 'local', eventType, relPath);
-        });
-
-        this.localWatcher = watcher;
     }
 
 
