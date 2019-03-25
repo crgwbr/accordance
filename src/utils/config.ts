@@ -25,7 +25,7 @@ const AccordanceConfigBase = t.type({
 const AccordanceConfigExtras = t.partial({
     syncIgnore: t.array(t.string),
     watchIgnore: t.array(t.string),
-    options: t.dictionary(t.string, t.boolean),
+    options: t.record(t.string, t.boolean),
 });
 
 const AccordanceConfig = t.intersection([
