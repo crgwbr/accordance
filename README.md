@@ -173,6 +173,16 @@ These limitation are not design decisions, just limitations of the current imple
 
 ## Change Log
 
+### 0.4.0 (*2018-03-25*)
+
+- Improve start-up procedure by running full sync before starting file watchers
+- Add periodic syncing to catch any changes missed by the watchers.
+- Add upgrade check and warning.
+
+### 0.3.1 (*2018-11-02*)
+
+- Upgraded Typescript version.
+
 ### 0.3.0 (*2018-10-31*)
 
 - Improve sync performance by removing redundant directories from the sync-queue when adding a new directory.
