@@ -375,14 +375,18 @@ class AccordCLI {
                 };
 
                 // Pipe child process stdout to main process stdout
-                child.stdout.on('data', (data) => {
-                    writeLines(process.stdout, data);
-                });
+                if (child.stdout) {
+                    child.stdout.on('data', (data) => {
+                        writeLines(process.stdout, data);
+                    });
+                }
 
                 // Pipe child process stderr to main process stderr
-                child.stderr.on('data', (data) => {
-                    writeLines(process.stderr, data);
-                });
+                if (child.stderr) {
+                    child.stderr.on('data', (data) => {
+                        writeLines(process.stdout, data);
+                    });
+                }
 
                 // Handle sync finish
                 child.on('close', (code) => {
