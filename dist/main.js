@@ -378,13 +378,17 @@ var AccordCLI = /** @class */ (function () {
                     stream.write(lines);
                 };
                 // Pipe child process stdout to main process stdout
-                child.stdout.on('data', function (data) {
-                    writeLines_1(process.stdout, data);
-                });
+                if (child.stdout) {
+                    child.stdout.on('data', function (data) {
+                        writeLines_1(process.stdout, data);
+                    });
+                }
                 // Pipe child process stderr to main process stderr
-                child.stderr.on('data', function (data) {
-                    writeLines_1(process.stderr, data);
-                });
+                if (child.stderr) {
+                    child.stderr.on('data', function (data) {
+                        writeLines_1(process.stdout, data);
+                    });
+                }
                 // Handle sync finish
                 child.on('close', function (code) {
                     // Unset sync locks

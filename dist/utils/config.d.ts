@@ -1,253 +1,93 @@
 import * as t from 'io-ts';
-declare const AccordanceConfig: t.IntersectionType<[t.InterfaceType<{
-    name: t.StringType;
-    local: t.InterfaceType<{
-        root: t.StringType;
-    }, t.TypeOfProps<{
-        root: t.StringType;
-    }>, t.OutputOfProps<{
-        root: t.StringType;
-    }>, unknown>;
-    remote: t.InterfaceType<{
-        username: t.StringType;
-        host: t.StringType;
-        root: t.StringType;
-    }, t.TypeOfProps<{
-        username: t.StringType;
-        host: t.StringType;
-        root: t.StringType;
-    }>, t.OutputOfProps<{
-        username: t.StringType;
-        host: t.StringType;
-        root: t.StringType;
-    }>, unknown>;
-    prefer: t.UnionType<(t.LiteralType<"local"> | t.LiteralType<"remote">)[], "local" | "remote", "local" | "remote", unknown>;
-}, t.TypeOfProps<{
-    name: t.StringType;
-    local: t.InterfaceType<{
-        root: t.StringType;
-    }, t.TypeOfProps<{
-        root: t.StringType;
-    }>, t.OutputOfProps<{
-        root: t.StringType;
-    }>, unknown>;
-    remote: t.InterfaceType<{
-        username: t.StringType;
-        host: t.StringType;
-        root: t.StringType;
-    }, t.TypeOfProps<{
-        username: t.StringType;
-        host: t.StringType;
-        root: t.StringType;
-    }>, t.OutputOfProps<{
-        username: t.StringType;
-        host: t.StringType;
-        root: t.StringType;
-    }>, unknown>;
-    prefer: t.UnionType<(t.LiteralType<"local"> | t.LiteralType<"remote">)[], "local" | "remote", "local" | "remote", unknown>;
-}>, t.OutputOfProps<{
-    name: t.StringType;
-    local: t.InterfaceType<{
-        root: t.StringType;
-    }, t.TypeOfProps<{
-        root: t.StringType;
-    }>, t.OutputOfProps<{
-        root: t.StringType;
-    }>, unknown>;
-    remote: t.InterfaceType<{
-        username: t.StringType;
-        host: t.StringType;
-        root: t.StringType;
-    }, t.TypeOfProps<{
-        username: t.StringType;
-        host: t.StringType;
-        root: t.StringType;
-    }>, t.OutputOfProps<{
-        username: t.StringType;
-        host: t.StringType;
-        root: t.StringType;
-    }>, unknown>;
-    prefer: t.UnionType<(t.LiteralType<"local"> | t.LiteralType<"remote">)[], "local" | "remote", "local" | "remote", unknown>;
-}>, unknown>, t.PartialType<{
-    syncIgnore: t.ArrayType<t.StringType, string[], string[], unknown>;
-    watchIgnore: t.ArrayType<t.StringType, string[], string[], unknown>;
-    options: t.DictionaryType<t.StringType, t.BooleanType, t.TypeOfDictionary<t.StringType, t.BooleanType>, t.OutputOfDictionary<t.StringType, t.BooleanType>, unknown>;
-}, t.TypeOfPartialProps<{
-    syncIgnore: t.ArrayType<t.StringType, string[], string[], unknown>;
-    watchIgnore: t.ArrayType<t.StringType, string[], string[], unknown>;
-    options: t.DictionaryType<t.StringType, t.BooleanType, t.TypeOfDictionary<t.StringType, t.BooleanType>, t.OutputOfDictionary<t.StringType, t.BooleanType>, unknown>;
-}>, t.OutputOfPartialProps<{
-    syncIgnore: t.ArrayType<t.StringType, string[], string[], unknown>;
-    watchIgnore: t.ArrayType<t.StringType, string[], string[], unknown>;
-    options: t.DictionaryType<t.StringType, t.BooleanType, t.TypeOfDictionary<t.StringType, t.BooleanType>, t.OutputOfDictionary<t.StringType, t.BooleanType>, unknown>;
-}>, unknown>], t.TypeOfProps<{
-    name: t.StringType;
-    local: t.InterfaceType<{
-        root: t.StringType;
-    }, t.TypeOfProps<{
-        root: t.StringType;
-    }>, t.OutputOfProps<{
-        root: t.StringType;
-    }>, unknown>;
-    remote: t.InterfaceType<{
-        username: t.StringType;
-        host: t.StringType;
-        root: t.StringType;
-    }, t.TypeOfProps<{
-        username: t.StringType;
-        host: t.StringType;
-        root: t.StringType;
-    }>, t.OutputOfProps<{
-        username: t.StringType;
-        host: t.StringType;
-        root: t.StringType;
-    }>, unknown>;
-    prefer: t.UnionType<(t.LiteralType<"local"> | t.LiteralType<"remote">)[], "local" | "remote", "local" | "remote", unknown>;
-}> & t.TypeOfPartialProps<{
-    syncIgnore: t.ArrayType<t.StringType, string[], string[], unknown>;
-    watchIgnore: t.ArrayType<t.StringType, string[], string[], unknown>;
-    options: t.DictionaryType<t.StringType, t.BooleanType, t.TypeOfDictionary<t.StringType, t.BooleanType>, t.OutputOfDictionary<t.StringType, t.BooleanType>, unknown>;
-}>, t.OutputOfProps<{
-    name: t.StringType;
-    local: t.InterfaceType<{
-        root: t.StringType;
-    }, t.TypeOfProps<{
-        root: t.StringType;
-    }>, t.OutputOfProps<{
-        root: t.StringType;
-    }>, unknown>;
-    remote: t.InterfaceType<{
-        username: t.StringType;
-        host: t.StringType;
-        root: t.StringType;
-    }, t.TypeOfProps<{
-        username: t.StringType;
-        host: t.StringType;
-        root: t.StringType;
-    }>, t.OutputOfProps<{
-        username: t.StringType;
-        host: t.StringType;
-        root: t.StringType;
-    }>, unknown>;
-    prefer: t.UnionType<(t.LiteralType<"local"> | t.LiteralType<"remote">)[], "local" | "remote", "local" | "remote", unknown>;
-}> & t.OutputOfPartialProps<{
-    syncIgnore: t.ArrayType<t.StringType, string[], string[], unknown>;
-    watchIgnore: t.ArrayType<t.StringType, string[], string[], unknown>;
-    options: t.DictionaryType<t.StringType, t.BooleanType, t.TypeOfDictionary<t.StringType, t.BooleanType>, t.OutputOfDictionary<t.StringType, t.BooleanType>, unknown>;
-}>, unknown>;
+declare const AccordanceConfig: t.IntersectionC<[t.TypeC<{
+    name: t.StringC;
+    local: t.TypeC<{
+        root: t.StringC;
+    }>;
+    remote: t.TypeC<{
+        username: t.StringC;
+        host: t.StringC;
+        root: t.StringC;
+    }>;
+    prefer: t.UnionC<[t.LiteralC<"local">, t.LiteralC<"remote">]>;
+}>, t.PartialC<{
+    syncIgnore: t.ArrayC<t.StringC>;
+    watchIgnore: t.ArrayC<t.StringC>;
+    options: t.RecordC<t.StringC, t.BooleanC>;
+}>]>;
 export declare type IAccordanceConfig = t.TypeOf<typeof AccordanceConfig>;
-export declare const readConfig: (configPath: string, encoding?: string) => t.TypeOfProps<{
-    name: t.StringType;
-    local: t.InterfaceType<{
-        root: t.StringType;
-    }, t.TypeOfProps<{
-        root: t.StringType;
-    }>, t.OutputOfProps<{
-        root: t.StringType;
-    }>, unknown>;
-    remote: t.InterfaceType<{
-        username: t.StringType;
-        host: t.StringType;
-        root: t.StringType;
-    }, t.TypeOfProps<{
-        username: t.StringType;
-        host: t.StringType;
-        root: t.StringType;
-    }>, t.OutputOfProps<{
-        username: t.StringType;
-        host: t.StringType;
-        root: t.StringType;
-    }>, unknown>;
-    prefer: t.UnionType<(t.LiteralType<"local"> | t.LiteralType<"remote">)[], "local" | "remote", "local" | "remote", unknown>;
-}> & t.TypeOfPartialProps<{
-    syncIgnore: t.ArrayType<t.StringType, string[], string[], unknown>;
-    watchIgnore: t.ArrayType<t.StringType, string[], string[], unknown>;
-    options: t.DictionaryType<t.StringType, t.BooleanType, t.TypeOfDictionary<t.StringType, t.BooleanType>, t.OutputOfDictionary<t.StringType, t.BooleanType>, unknown>;
-}>;
+export declare const readConfig: (configPath: string, encoding?: string) => {
+    name: string;
+    local: {
+        root: string;
+    };
+    remote: {
+        username: string;
+        host: string;
+        root: string;
+    };
+    prefer: "local" | "remote";
+} & {
+    syncIgnore?: string[] | undefined;
+    watchIgnore?: string[] | undefined;
+    options?: {
+        [x: string]: boolean;
+    } | undefined;
+};
 export declare const getAnyMatchIgnorePatterns: (rootPath: string, rules: string[]) => string[];
-export declare const getUnisonConfigPath: (config: t.TypeOfProps<{
-    name: t.StringType;
-    local: t.InterfaceType<{
-        root: t.StringType;
-    }, t.TypeOfProps<{
-        root: t.StringType;
-    }>, t.OutputOfProps<{
-        root: t.StringType;
-    }>, unknown>;
-    remote: t.InterfaceType<{
-        username: t.StringType;
-        host: t.StringType;
-        root: t.StringType;
-    }, t.TypeOfProps<{
-        username: t.StringType;
-        host: t.StringType;
-        root: t.StringType;
-    }>, t.OutputOfProps<{
-        username: t.StringType;
-        host: t.StringType;
-        root: t.StringType;
-    }>, unknown>;
-    prefer: t.UnionType<(t.LiteralType<"local"> | t.LiteralType<"remote">)[], "local" | "remote", "local" | "remote", unknown>;
-}> & t.TypeOfPartialProps<{
-    syncIgnore: t.ArrayType<t.StringType, string[], string[], unknown>;
-    watchIgnore: t.ArrayType<t.StringType, string[], string[], unknown>;
-    options: t.DictionaryType<t.StringType, t.BooleanType, t.TypeOfDictionary<t.StringType, t.BooleanType>, t.OutputOfDictionary<t.StringType, t.BooleanType>, unknown>;
-}>) => string;
-export declare const buildUnisonConfig: (config: t.TypeOfProps<{
-    name: t.StringType;
-    local: t.InterfaceType<{
-        root: t.StringType;
-    }, t.TypeOfProps<{
-        root: t.StringType;
-    }>, t.OutputOfProps<{
-        root: t.StringType;
-    }>, unknown>;
-    remote: t.InterfaceType<{
-        username: t.StringType;
-        host: t.StringType;
-        root: t.StringType;
-    }, t.TypeOfProps<{
-        username: t.StringType;
-        host: t.StringType;
-        root: t.StringType;
-    }>, t.OutputOfProps<{
-        username: t.StringType;
-        host: t.StringType;
-        root: t.StringType;
-    }>, unknown>;
-    prefer: t.UnionType<(t.LiteralType<"local"> | t.LiteralType<"remote">)[], "local" | "remote", "local" | "remote", unknown>;
-}> & t.TypeOfPartialProps<{
-    syncIgnore: t.ArrayType<t.StringType, string[], string[], unknown>;
-    watchIgnore: t.ArrayType<t.StringType, string[], string[], unknown>;
-    options: t.DictionaryType<t.StringType, t.BooleanType, t.TypeOfDictionary<t.StringType, t.BooleanType>, t.OutputOfDictionary<t.StringType, t.BooleanType>, unknown>;
-}>) => string;
-export declare const writeUnisonConfigFile: (config: t.TypeOfProps<{
-    name: t.StringType;
-    local: t.InterfaceType<{
-        root: t.StringType;
-    }, t.TypeOfProps<{
-        root: t.StringType;
-    }>, t.OutputOfProps<{
-        root: t.StringType;
-    }>, unknown>;
-    remote: t.InterfaceType<{
-        username: t.StringType;
-        host: t.StringType;
-        root: t.StringType;
-    }, t.TypeOfProps<{
-        username: t.StringType;
-        host: t.StringType;
-        root: t.StringType;
-    }>, t.OutputOfProps<{
-        username: t.StringType;
-        host: t.StringType;
-        root: t.StringType;
-    }>, unknown>;
-    prefer: t.UnionType<(t.LiteralType<"local"> | t.LiteralType<"remote">)[], "local" | "remote", "local" | "remote", unknown>;
-}> & t.TypeOfPartialProps<{
-    syncIgnore: t.ArrayType<t.StringType, string[], string[], unknown>;
-    watchIgnore: t.ArrayType<t.StringType, string[], string[], unknown>;
-    options: t.DictionaryType<t.StringType, t.BooleanType, t.TypeOfDictionary<t.StringType, t.BooleanType>, t.OutputOfDictionary<t.StringType, t.BooleanType>, unknown>;
-}>) => void;
+export declare const getUnisonConfigPath: (config: {
+    name: string;
+    local: {
+        root: string;
+    };
+    remote: {
+        username: string;
+        host: string;
+        root: string;
+    };
+    prefer: "local" | "remote";
+} & {
+    syncIgnore?: string[] | undefined;
+    watchIgnore?: string[] | undefined;
+    options?: {
+        [x: string]: boolean;
+    } | undefined;
+}) => string;
+export declare const buildUnisonConfig: (config: {
+    name: string;
+    local: {
+        root: string;
+    };
+    remote: {
+        username: string;
+        host: string;
+        root: string;
+    };
+    prefer: "local" | "remote";
+} & {
+    syncIgnore?: string[] | undefined;
+    watchIgnore?: string[] | undefined;
+    options?: {
+        [x: string]: boolean;
+    } | undefined;
+}) => string;
+export declare const writeUnisonConfigFile: (config: {
+    name: string;
+    local: {
+        root: string;
+    };
+    remote: {
+        username: string;
+        host: string;
+        root: string;
+    };
+    prefer: "local" | "remote";
+} & {
+    syncIgnore?: string[] | undefined;
+    watchIgnore?: string[] | undefined;
+    options?: {
+        [x: string]: boolean;
+    } | undefined;
+}) => void;
 export {};
 //# sourceMappingURL=config.d.ts.map
