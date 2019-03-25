@@ -19,14 +19,14 @@
     "accordance": "./dist/main.js"
   },
   "devDependencies": {
-    "@types/chokidar": "^1.7.5",
+    "@types/chokidar": "^2.1.3",
     "@types/colors": "^1.2.1",
     "@types/commander": "^2.12.2",
     "@types/js-yaml": "^3.11.2",
     "@types/request": "^2.48.1",
     "@types/request-promise-native": "^1.0.15",
     "@types/ssh2": "^0.5.35",
-    "ts-node": "^7.0.0",
+    "ts-node": "^8.0.3",
     "tslint": "^5.10.0",
     "typescript": "^3.1.4"
   },
@@ -38,6 +38,6 @@
     "js-yaml": "^3.12.0",
     "request": "^2.88.0",
     "request-promise-native": "^1.0.7",
-    "ssh2": "^0.6.1"
+    "ssh2": "^0.8.2"
   }
 }
