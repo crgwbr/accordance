@@ -173,6 +173,10 @@ These limitation are not design decisions, just limitations of the current imple
 
 ## Change Log
 
+### 0.4.1 (*2018-03-25*)
+
+- Fix issue with Unison throwing a "Uncaught exception Sys_blocked_io" error in initial sync.
+
 ### 0.4.0 (*2018-03-25*)
 
 - Improve start-up procedure by running full sync before starting file watchers
