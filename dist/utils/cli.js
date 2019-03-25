@@ -4,6 +4,9 @@ var colors = require("colors");
 exports.makeRed = function (txt) {
     return colors.red(txt);
 };
+exports.makeYellow = function (txt) {
+    return colors.yellow(txt);
+};
 exports.makeGreen = function (txt) {
     return colors.green(txt);
 };

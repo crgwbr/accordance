@@ -4,4 +4,10 @@ export declare const getPackageInfo: () => t.TypeOfProps<{
     version: t.StringType;
     description: t.StringType;
 }>;
+export declare const checkForUpdates: () => Promise<{
+    isOutdated: boolean;
+    name: string;
+    current: string;
+    latest: string;
+}>;
 //# sourceMappingURL=manifest.d.ts.map
