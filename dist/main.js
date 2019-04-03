@@ -345,7 +345,7 @@ var AccordCLI = /** @class */ (function () {
     AccordCLI.prototype.runSync = function (queueEntry) {
         var _this = this;
         var self = this;
-        return new Promise(function (resolve, reject) {
+        return new Promise(function (resolve) {
             // Use locking to make sure we only run one sync at a time
             if (_this.syncIsRunning) {
                 return;
@@ -396,7 +396,7 @@ var AccordCLI = /** @class */ (function () {
                     // Log any errors
                     if (code !== 0) {
                         console.log(cli_1.makeRed("Unison exited with code " + code));
-                        reject(new Error("Unison exited with code " + code));
+                        resolve();
                         return;
                     }
                     // If more sync actions were requested while this sync was running, run sync again.
@@ -412,7 +412,7 @@ var AccordCLI = /** @class */ (function () {
             catch (e) {
                 console.error(e);
                 self.syncIsRunning = false;
-                reject(e);
+                resolve();
             }
         });
     };
