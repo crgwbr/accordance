@@ -338,7 +338,7 @@ class AccordCLI {
 
     private runSync (queueEntry?: ISyncQueueEntry) {
         const self = this;
-        return new Promise<void>((resolve, reject) => {
+        return new Promise<void>((resolve) => {
             // Use locking to make sure we only run one sync at a time
             if (this.syncIsRunning) {
                 return;
@@ -395,7 +395,7 @@ class AccordCLI {
                     // Log any errors
                     if (code !== 0) {
                         console.log(makeRed(`Unison exited with code ${code}`));
-                        reject(new Error(`Unison exited with code ${code}`));
+                        resolve();
                         return;
                     }
                     // If more sync actions were requested while this sync was running, run sync again.
@@ -410,7 +410,7 @@ class AccordCLI {
             } catch (e) {
                 console.error(e);
                 self.syncIsRunning = false;
-                reject(e);
+                resolve();
             }
         });
     }
