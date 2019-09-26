@@ -173,11 +173,15 @@ These limitation are not design decisions, just limitations of the current imple
 
 ## Change Log
 
-### 0.4.1 (*2018-03-25*)
+### 0.5.0 (*2019-09-26*)
+
+- Upgrade several dependencies, most notably, Chokidar. This should significantly improve CPU and memory performance.
+
+### 0.4.1 (*2019-03-25*)
 
 - Fix issue with Unison throwing a "Uncaught exception Sys_blocked_io" error in initial sync.
 
-### 0.4.0 (*2018-03-25*)
+### 0.4.0 (*2019-03-25*)
 
 - Improve start-up procedure by running full sync before starting file watchers
 - Add periodic syncing to catch any changes missed by the watchers.
