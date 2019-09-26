@@ -17,6 +17,7 @@ var yaml = require("js-yaml");
 var fs = require("fs");
 var t = require("io-ts");
 var PathReporter_1 = require("io-ts/lib/PathReporter");
+var Either_1 = require("fp-ts/lib/Either");
 var AccordanceConfigBase = t.type({
     name: t.string,
     local: t.type({
@@ -45,11 +46,11 @@ exports.readConfig = function (configPath, encoding) {
     if (encoding === void 0) { encoding = 'utf8'; }
     var content = fs.readFileSync(configPath, encoding);
     var rawConfig = yaml.safeLoad(content);
-    return AccordanceConfig
-        .decode(rawConfig)
-        .getOrElseL(function (errors) {
-        throw new Error(PathReporter_1.failure(errors).join('\n'));
-    });
+    var config = AccordanceConfig.decode(rawConfig);
+    if (Either_1.isLeft(config)) {
+        throw new Error(PathReporter_1.failure(config.left).join('\n'));
+    }
+    return config.right;
 };
 var _getIgnorePattern = function (rootPath, unisonIgnore) {
     var groups = unisonIgnore.match(/^([\w]+)\s+(.+)$/);

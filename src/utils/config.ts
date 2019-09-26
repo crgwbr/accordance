@@ -4,6 +4,7 @@ import yaml = require('js-yaml');
 import fs = require('fs');
 import * as t from 'io-ts';
 import {failure} from 'io-ts/lib/PathReporter';
+import {isLeft} from 'fp-ts/lib/Either';
 
 
 const AccordanceConfigBase = t.type({
@@ -39,11 +40,11 @@ export type IAccordanceConfig = t.TypeOf<typeof AccordanceConfig>;
 export const readConfig = function(configPath: string, encoding = 'utf8') {
     const content = fs.readFileSync(configPath, encoding);
     const rawConfig = yaml.safeLoad(content);
-    return AccordanceConfig
-        .decode(rawConfig)
-        .getOrElseL((errors) => {
-            throw new Error(failure(errors).join('\n'));
-        });
+    const config = AccordanceConfig.decode(rawConfig);
+    if (isLeft(config)) {
+        throw new Error(failure(config.left).join('\n'));
+    }
+    return config.right;
 };
 
 

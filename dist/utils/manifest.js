@@ -40,6 +40,7 @@ var path = require("path");
 var request = require("request-promise-native");
 var t = require("io-ts");
 var PathReporter_1 = require("io-ts/lib/PathReporter");
+var Either_1 = require("fp-ts/lib/Either");
 var NodePackageManifest = t.type({
     name: t.string,
     version: t.string,
@@ -53,12 +54,12 @@ var NPMPkgInfo = t.type({
 });
 exports.getPackageInfo = function () {
     var manifestPath = path.normalize(path.join(__dirname, '..', '..', 'package.json'));
-    var manifest = require(manifestPath);
-    return NodePackageManifest
-        .decode(manifest)
-        .getOrElseL(function (errors) {
-        throw new Error(PathReporter_1.failure(errors).join('\n'));
-    });
+    var rawManifest = require(manifestPath);
+    var manifest = NodePackageManifest.decode(rawManifest);
+    if (Either_1.isLeft(manifest)) {
+        throw new Error(PathReporter_1.failure(manifest.left).join('\n'));
+    }
+    return manifest.right;
 };
 exports.checkForUpdates = function () {
     return __awaiter(this, void 0, void 0, function () {
@@ -73,16 +74,15 @@ exports.checkForUpdates = function () {
                         })];
                 case 1:
                     npmInfoRaw = _a.sent();
-                    npmInfo = NPMPkgInfo
-                        .decode(npmInfoRaw)
-                        .getOrElseL(function (errors) {
-                        throw new Error(PathReporter_1.failure(errors).join('\n'));
-                    });
+                    npmInfo = NPMPkgInfo.decode(npmInfoRaw);
+                    if (Either_1.isLeft(npmInfo)) {
+                        throw new Error(PathReporter_1.failure(npmInfo.left).join('\n'));
+                    }
                     return [2 /*return*/, {
-                            isOutdated: (pkg.version !== npmInfo['dist-tags'].latest),
+                            isOutdated: (pkg.version !== npmInfo.right['dist-tags'].latest),
                             name: pkg.name,
                             current: pkg.version,
-                            latest: npmInfo['dist-tags'].latest,
+                            latest: npmInfo.right['dist-tags'].latest,
                         }];
             }
         });
