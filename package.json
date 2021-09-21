@@ -36,6 +36,6 @@
     "js-yaml": "^3.12.0",
     "request": "^2.88.0",
     "request-promise-native": "^1.0.7",
-    "ssh2": "^0.8.2"
+    "ssh2": "^1.4.0"
   }
 }
