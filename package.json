@@ -1,6 +1,6 @@
 {
   "name": "accordance",
-  "version": "0.5.0",
+  "version": "0.6.0",
   "description": "A wrapper around unison to provide cross-platform, automatic, bidirectional file syncing",
   "main": "./dist/main.js",
   "types": "./dist/main.d.ts",
@@ -8,7 +8,7 @@
     "preversion": "yarn run lint",
     "version": "yarn run build && git add --all",
     "postversion": "git push && git push --tags",
-    "lint": "tslint --project tsconfig.json",
+    "lint": "eslint -c .eslintrc.json --ext .ts --ext .js ./src",
     "build": "tsc -p tsconfig.json"
   },
   "repository": "git@github.com:crgwbr/accordance.git",
@@ -19,23 +19,31 @@
     "accordance": "./dist/main.js"
   },
   "devDependencies": {
-    "@types/js-yaml": "^3.11.2",
-    "@types/request": "^2.48.1",
-    "@types/request-promise-native": "^1.0.15",
-    "@types/ssh2": "^0.5.35",
-    "ts-node": "^8.0.3",
-    "tslint": "^5.10.0",
-    "typescript": "^3.1.4"
+    "@tsconfig/node16": "^1.0.1",
+    "@types/js-yaml": "^4.0.5",
+    "@types/request": "^2.48.8",
+    "@types/request-promise-native": "^1.0.18",
+    "@types/ssh2": "^1.11.7",
+    "@typescript-eslint/eslint-plugin": "^5.48.1",
+    "@typescript-eslint/parser": "^5.48.1",
+    "eslint": "^8.31.0",
+    "eslint-config-prettier": "^8.6.0",
+    "eslint-plugin-import": "^2.27.4",
+    "eslint-plugin-prettier": "^4.2.1",
+    "prettier": "^2.8.2",
+    "ts-node": "^10.9.1",
+    "tslint": "^6.1.3",
+    "typescript": "^4.9.4"
   },
   "dependencies": {
-    "chokidar": "^3.1.1",
+    "chokidar": "^3.5.3",
     "colors": "^1.3.0",
-    "commander": "^3.0.2",
-    "fp-ts": "^2.0.1",
-    "io-ts": "^2.0.1",
-    "js-yaml": "^3.12.0",
-    "request": "^2.88.0",
-    "request-promise-native": "^1.0.7",
-    "ssh2": "^0.8.2"
+    "commander": "^9.5.0",
+    "fp-ts": "^2.13.1",
+    "io-ts": "^2.2.20",
+    "js-yaml": "^4.1.0",
+    "request": "^2.88.2",
+    "request-promise-native": "^1.0.9",
+    "ssh2": "^1.11.0"
   }
 }

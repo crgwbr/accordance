@@ -6,7 +6,6 @@ name: projects
 local:
   root: ~/Projects/
 
-
 # Info regarding the remote directory you'd like to sync to local
 remote:
   username: crgwbr

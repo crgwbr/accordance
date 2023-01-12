@@ -1,4 +1,4 @@
-import { IAccordanceConfig } from './config';
+import { IAccordanceConfig } from "./config";
 /**
  * Interface of an entry in the unison sync queue
  */
@@ -17,7 +17,7 @@ export declare class SyncQueue {
      * Callback function to be run after an item is added to the queue
      * @type {[type]}
      */
-    private onQueue;
+    private readonly onQueue;
     constructor(onQueue: () => void);
     /**
      * Add a path to the sync queue

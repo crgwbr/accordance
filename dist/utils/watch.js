@@ -1,8 +1,9 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
-var chokidar = require("chokidar");
-exports.buildWatcher = function (path, ignored) {
-    var watcher = chokidar.watch(path, {
+exports.buildWatcher = void 0;
+const chokidar = require("chokidar");
+const buildWatcher = function (path, ignored) {
+    const watcher = chokidar.watch(path, {
         persistent: true,
         ignored: ignored,
         ignoreInitial: true,
@@ -10,4 +11,5 @@ exports.buildWatcher = function (path, ignored) {
     });
     return watcher;
 };
+exports.buildWatcher = buildWatcher;
 //# sourceMappingURL=watch.js.map

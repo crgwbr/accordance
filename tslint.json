@@ -49,15 +49,29 @@
         "restrict-plus-operands": true,
         "semicolon": [true, "always"],
         "triple-equals": [true, "allow-null-check"],
-        "typedef-whitespace": [true, {
-            "call-signature": "nospace",
-            "index-signature": "nospace",
-            "parameter": "nospace",
-            "property-declaration": "nospace",
-            "variable-declaration": "nospace"
-        }],
+        "typedef-whitespace": [
+            true,
+            {
+                "call-signature": "nospace",
+                "index-signature": "nospace",
+                "parameter": "nospace",
+                "property-declaration": "nospace",
+                "variable-declaration": "nospace"
+            }
+        ],
         "use-isnan": true,
         "variable-name": [true, "ban-keywords"],
-        "whitespace": [true, "check-branch", "check-decl", "check-operator", "check-separator", "check-rest-spread", "check-type", "check-typecast", "check-type-operator", "check-preblock"]
+        "whitespace": [
+            true,
+            "check-branch",
+            "check-decl",
+            "check-operator",
+            "check-separator",
+            "check-rest-spread",
+            "check-type",
+            "check-typecast",
+            "check-type-operator",
+            "check-preblock"
+        ]
     }
 }

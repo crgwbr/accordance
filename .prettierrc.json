@@ -1,0 +1,14 @@
+{
+    "printWidth": 80,
+    "tabWidth": 4,
+    "quoteProps": "consistent",
+    "trailingComma": "all",
+    "overrides": [
+        {
+            "files": ["*.yml", "*.yaml", "package.json", "yarn.lock"],
+            "options": {
+                "tabWidth": 2
+            }
+        }
+    ]
+}

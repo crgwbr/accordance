@@ -17,12 +17,11 @@ There are several ways you could approach this problem.
 3. **Rsync**: Easy to get working, but it only syncs files one-direction. Doesn't have a watch mode, so you need to run it manually after each save.
 4. **Unison**: Bad documentation, but a great tool. Syncs files bi-directionally. Supports watching files, but needs an adapter like [unox](https://github.com/hnsl/unox) to do so. Unox itself doesn't support ignoring file patterns, so it's terribly slow when watching anything with a `node_modules` directory.
 
-After trying and being dissatisfied with each of these, I decided to write a tool to make this better: ***Accordance***.
+After trying and being dissatisfied with each of these, I decided to write a tool to make this better: **_Accordance_**.
 
 ![](overview.png)
 
-Accordance is a wrapper around Unison. It solves the problem of watching files and triggering syncs. Whether the change happens on the local system (e.g. saving a file in your editor) or on the remote (e.g. creating a new Django migration file), Accordance will detect the change and tell Unison to sync the directory in which the change occurred. This results in a fairly hassle-free background file-synchronizer that performs better (syncs faster) than the alternatives *and* doesn't break INOTIFY listeners on the remote machine.
-
+Accordance is a wrapper around Unison. It solves the problem of watching files and triggering syncs. Whether the change happens on the local system (e.g. saving a file in your editor) or on the remote (e.g. creating a new Django migration file), Accordance will detect the change and tell Unison to sync the directory in which the change occurred. This results in a fairly hassle-free background file-synchronizer that performs better (syncs faster) than the alternatives _and_ doesn't break INOTIFY listeners on the remote machine.
 
 ## Getting Started
 
@@ -92,47 +91,46 @@ name: projects
 
 # Info regarding the local directory you'd like to sync to remote
 local:
-  root: ~/Projects/
-
+    root: ~/Projects/
 
 # Info regarding the remote directory you'd like to sync to local
 remote:
-  username: crgwbr
-  host: myserver.com
-  root: ~/Projects/
+    username: crgwbr
+    host: myserver.com
+    root: ~/Projects/
 
 # In the event of a conflict, which version should win? Must be set to either `local` or `remote`.
 prefer: local
 
 # Optional: list of files, paths, and patterns to ignore.
 syncIgnore:
-  # Ignore OS X garbage
-  - Name .DS_Store
+    # Ignore OS X garbage
+    - Name .DS_Store
 
-  # Ignore Unison's temporary files
-  - Name *.unison.tmp
+    # Ignore Unison's temporary files
+    - Name *.unison.tmp
 
-  # Ignore node_modules directories
-  - Name node_modules
+    # Ignore node_modules directories
+    - Name node_modules
 
-  # Ignore .tox virtual environments
-  - Name .tox
+    # Ignore .tox virtual environments
+    - Name .tox
 
-  # Ignore Python stuff
-  - Name __pycache__
-  - Name .eggs
-  - Name .egg
-  - Name site-packages
-  - Name lib64/
-  - Name parts/
-  - Name sdist/
-  - Name var/
+    # Ignore Python stuff
+    - Name __pycache__
+    - Name .eggs
+    - Name .egg
+    - Name site-packages
+    - Name lib64/
+    - Name parts/
+    - Name sdist/
+    - Name var/
 
 # Other misc options padded through into the unison config file
 options:
-  auto: true
-  batch: true
-  confirmbigdel: true
+    auto: true
+    batch: true
+    confirmbigdel: true
 ```
 
 ### Running Sync
@@ -159,7 +157,6 @@ This process will run until your end it with `ctrl+c`. While it's running it's d
 2. It opens an SSH connection to the remote server and starts a process to watch FSEvents / INOTIFY for file changes to on remote system. Changes are sent back to the local system as notifications over the SSH connection.
 3. Whenever a change is detected (on either the local or remote system), the local system runs unison in a subprocess to sync the local and remote systems. As as a performance optimization, only the path that the change was detected in is synced. For example, if a change is detected to the `myproject/README.md` file within the `~/Projects/` directory, a sync of the `myproject/` directory will be run. The only exception to this is on initial start-up of the sync process, when a full sync is run.
 
-
 ### Limitations
 
 The following limitations currently apply:
@@ -170,35 +167,40 @@ The following limitations currently apply:
 
 These limitation are not design decisions, just limitations of the current implementation. They may be improved in future versions of Accordance.
 
-
 ## Change Log
 
-### 0.5.0 (*2019-09-26*)
+### 0.6.0 (_2023-01-12_)
 
-- Upgrade several dependencies, most notably, Chokidar. This should significantly improve CPU and memory performance.
+-   Upgrade several dependencies, most notably, Chokidar.
+-   Add eslint and prettier.
+-   Update tsconfig options for Node >= 16
 
-### 0.4.1 (*2019-03-25*)
+### 0.5.0 (_2019-09-26_)
 
-- Fix issue with Unison throwing a "Uncaught exception Sys_blocked_io" error in initial sync.
+-   Upgrade several dependencies, most notably, Chokidar. This should significantly improve CPU and memory performance.
 
-### 0.4.0 (*2019-03-25*)
+### 0.4.1 (_2019-03-25_)
 
-- Improve start-up procedure by running full sync before starting file watchers
-- Add periodic syncing to catch any changes missed by the watchers.
-- Add upgrade check and warning.
+-   Fix issue with Unison throwing a "Uncaught exception Sys_blocked_io" error in initial sync.
 
-### 0.3.1 (*2018-11-02*)
+### 0.4.0 (_2019-03-25_)
 
-- Upgraded Typescript version.
+-   Improve start-up procedure by running full sync before starting file watchers
+-   Add periodic syncing to catch any changes missed by the watchers.
+-   Add upgrade check and warning.
 
-### 0.3.0 (*2018-10-31*)
+### 0.3.1 (_2018-11-02_)
 
-- Improve sync performance by removing redundant directories from the sync-queue when adding a new directory.
+-   Upgraded Typescript version.
 
-### 0.2.0 (*2018-07-27*)
+### 0.3.0 (_2018-10-31_)
 
-- Added remote username as a mandatory field in the config file.
+-   Improve sync performance by removing redundant directories from the sync-queue when adding a new directory.
 
-### 0.1.6 (*2018-07-19*)
+### 0.2.0 (_2018-07-27_)
 
-- Initial Release.
+-   Added remote username as a mandatory field in the config file.
+
+### 0.1.6 (_2018-07-19_)
+
+-   Initial Release.
