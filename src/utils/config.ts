@@ -11,11 +11,16 @@ const AccordanceConfigBase = t.type({
     local: t.type({
         root: t.string,
     }),
-    remote: t.type({
-        username: t.string,
-        host: t.string,
-        root: t.string,
-    }),
+    remote: t.intersection([
+        t.type({
+            username: t.string,
+            host: t.string,
+            root: t.string,
+        }),
+        t.partial({
+            port: t.number,
+        }),
+    ]),
     prefer: t.union([t.literal("local"), t.literal("remote")]),
 });
 
@@ -97,7 +102,9 @@ const _buildUnisonConfigLine = function (
 
 export const buildUnisonConfig = function (config: IAccordanceConfig) {
     // Setup the local and remote roots
-    const remoteURL = `ssh://${config.remote.host}/${config.remote.root}`;
+    const username = config.remote.username || os.userInfo().username;
+    const port = config.remote.port || 22;
+    const remoteURL = `ssh://${username}@${config.remote.host}:${port}/${config.remote.root}`;
     const lines: string[] = [
         _buildUnisonConfigLine("root", config.local.root),
         _buildUnisonConfigLine("root", remoteURL),

@@ -11,6 +11,7 @@ remote:
   username: crgwbr
   host: myserver.com
   root: ~/Projects/
+  port: 22
 
 # In the event of a conflict, which version should win? Must be set to either `local` or `remote`.
 prefer: local

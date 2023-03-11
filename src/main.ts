@@ -233,7 +233,7 @@ class AccordCLI {
         const sshAgentSock = process.env.SSH_AUTH_SOCK;
         const sshConfig: ConnectConfig = {
             host: config.remote.host,
-            port: 22,
+            port: config.remote.port || 22,
             username: config.remote.username || os.userInfo().username,
             agent: sshAgentSock,
         };
