@@ -98,6 +98,7 @@ remote:
     username: crgwbr
     host: myserver.com
     root: ~/Projects/
+    port: 22
 
 # In the event of a conflict, which version should win? Must be set to either `local` or `remote`.
 prefer: local
@@ -162,8 +163,7 @@ This process will run until your end it with `ctrl+c`. While it's running it's d
 The following limitations currently apply:
 
 1. The local system must be able to SSH into the remote system. This is necessary for both FSEvent / INOTIFY monitoring and unison file syncing.
-    1. The SSH connection must be over port 22.
-    2. SSH Agent is the only supported authentication mechanism. The path to the SSH Agent socket must be set in the `SSH_AUTH_SOCK` environment variable and the private key must already be loaded into the agent (via `ssh-add`)
+    1. SSH Agent is the only supported authentication mechanism. The path to the SSH Agent socket must be set in the `SSH_AUTH_SOCK` environment variable and the private key must already be loaded into the agent (via `ssh-add`)
 
 These limitation are not design decisions, just limitations of the current implementation. They may be improved in future versions of Accordance.
 
