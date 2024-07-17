@@ -1,9 +1,9 @@
 import path from "node:path";
 
+import axios from "axios";
 import { isLeft } from "fp-ts/lib/Either";
 import * as t from "io-ts";
 import { failure } from "io-ts/lib/PathReporter";
-import request from "request-promise-native";
 
 const NodePackageManifest = t.type({
     name: t.string,
@@ -33,11 +33,13 @@ export const getPackageInfo = function () {
 
 export const checkForUpdates = async function () {
     const pkg = getPackageInfo();
-    const npmInfoRaw: unknown = await request({
-        uri: `https://registry.npmjs.org/${pkg.name}`,
-        json: true,
-    });
-    const npmInfo = NPMPkgInfo.decode(npmInfoRaw);
+    const npmInfoResp = await axios.get(
+        `https://registry.npmjs.org/${pkg.name}`,
+        {
+            responseType: "json",
+        },
+    );
+    const npmInfo = NPMPkgInfo.decode(npmInfoResp.data);
     if (isLeft(npmInfo)) {
         throw new Error(failure(npmInfo.left).join("\n"));
     }
