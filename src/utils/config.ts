@@ -1,10 +1,10 @@
-import * as os from "os";
-import * as path from "path";
-import * as yaml from "js-yaml";
+import { isLeft } from "fp-ts/lib/Either";
 import * as fs from "fs";
 import * as t from "io-ts";
 import { failure } from "io-ts/lib/PathReporter";
-import { isLeft } from "fp-ts/lib/Either";
+import * as yaml from "js-yaml";
+import * as os from "os";
+import * as path from "path";
 
 const AccordanceConfigBase = t.type({
     name: t.string,

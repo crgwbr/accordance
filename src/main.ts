@@ -1,23 +1,24 @@
 #!/usr/bin/env node
+import { FSWatcher } from "chokidar";
+import { Command } from "commander";
+import { Client, ClientChannel, ConnectConfig } from "ssh2";
+
+import { makeGreen, makeRed, makeYellow, registerCleanupFn } from "./utils/cli";
+import {
+    IAccordanceConfig,
+    getAnyMatchIgnorePatterns,
+    readConfig,
+    writeUnisonConfigFile,
+} from "./utils/config";
+import { checkForUpdates, getPackageInfo } from "./utils/manifest";
+import { ISyncQueueEntry, SyncQueue } from "./utils/queue";
+import { getConnection } from "./utils/remote";
+import { buildWatcher } from "./utils/watch";
 
 import os = require("os");
 import path = require("path");
 import childProcess = require("child_process");
 import readline = require("readline");
-import { Command } from "commander";
-import { ConnectConfig, Client, ClientChannel } from "ssh2";
-import { FSWatcher } from "chokidar";
-import { getPackageInfo, checkForUpdates } from "./utils/manifest";
-import {
-    IAccordanceConfig,
-    readConfig,
-    getAnyMatchIgnorePatterns,
-    writeUnisonConfigFile,
-} from "./utils/config";
-import { makeRed, makeYellow, makeGreen, registerCleanupFn } from "./utils/cli";
-import { ISyncQueueEntry, SyncQueue } from "./utils/queue";
-import { buildWatcher } from "./utils/watch";
-import { getConnection } from "./utils/remote";
 
 const program = new Command();
 

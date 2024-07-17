@@ -1,6 +1,7 @@
-import path = require("path");
-import { IAccordanceConfig } from "./config";
 import { makeGreen } from "./cli";
+import { IAccordanceConfig } from "./config";
+
+import path = require("path");
 
 /**
  * Interface of an entry in the unison sync queue

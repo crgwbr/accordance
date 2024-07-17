@@ -1,5 +1,6 @@
-import ssh2 = require("ssh2");
 import { ConnectConfig } from "ssh2";
+
+import ssh2 = require("ssh2");
 
 export const getConnection = async function (
     connection: ConnectConfig,

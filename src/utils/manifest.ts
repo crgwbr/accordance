@@ -1,8 +1,9 @@
-import path = require("path");
-import request = require("request-promise-native");
+import { isLeft } from "fp-ts/lib/Either";
 import * as t from "io-ts";
 import { failure } from "io-ts/lib/PathReporter";
-import { isLeft } from "fp-ts/lib/Either";
+
+import path = require("path");
+import request = require("request-promise-native");
 
 const NodePackageManifest = t.type({
     name: t.string,

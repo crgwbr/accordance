@@ -1,4 +1,13 @@
 repos:
+  - repo: https://gitlab.com/thelabnyc/thelab-pre-commit-hooks
+    rev: r0.0.2
+    hooks:
+      - id: update-copyright-year
+        args:
+          - --file=LICENSE
+          - --pattern=(?P<year>\d{4})\s+Craig Weber
+      - id: npm-install
+
   - repo: https://github.com/pre-commit/pre-commit-hooks
     rev: v2.3.0
     hooks:
@@ -14,6 +23,5 @@ repos:
     rev: "v3.3.3"
     hooks:
       - id: prettier
-        types_or: [javascript, jsx, ts, tsx, scss, yaml, json]
 
 exclude: "^dist/"
