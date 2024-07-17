@@ -1,4 +1,4 @@
-import chokidar = require("chokidar");
+import chokidar from "chokidar";
 
 export const buildWatcher = function (path: string, ignored: string[]) {
     const watcher = chokidar.watch(path, {

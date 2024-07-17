@@ -1,4 +1,4 @@
-import colors = require("colors");
+import colors from "colors";
 
 export const makeRed = function (txt: string) {
     return colors.red(txt);

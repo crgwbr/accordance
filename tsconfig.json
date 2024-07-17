@@ -1,14 +1,9 @@
 {
     "extends": "@tsconfig/node16/tsconfig.json",
     "compilerOptions": {
-        "allowJs": false,
-        "allowSyntheticDefaultImports": false,
-        "alwaysStrict": true,
         "declaration": true,
         "declarationMap": true,
         "downlevelIteration": true,
-        "importHelpers": false,
-        "inlineSources": true,
         "newLine": "lf",
         "noFallthroughCasesInSwitch": true,
         "noImplicitAny": true,

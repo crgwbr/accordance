@@ -1,6 +1,11 @@
 #!/usr/bin/env node
+import childProcess from "node:child_process";
+import os from "node:os";
+import path from "node:path";
+import readline from "node:readline";
+
+import { Command } from "@commander-js/extra-typings";
 import { FSWatcher } from "chokidar";
-import { Command } from "commander";
 import { Client, ClientChannel, ConnectConfig } from "ssh2";
 
 import { makeGreen, makeRed, makeYellow, registerCleanupFn } from "./utils/cli";
@@ -15,11 +20,6 @@ import { ISyncQueueEntry, SyncQueue } from "./utils/queue";
 import { getConnection } from "./utils/remote";
 import { buildWatcher } from "./utils/watch";
 
-import os = require("os");
-import path = require("path");
-import childProcess = require("child_process");
-import readline = require("readline");
-
 const program = new Command();
 
 class AccordCLI {
@@ -32,7 +32,9 @@ class AccordCLI {
      * Queue of directories that need sync'd. Will be processed in FIFO order.
      */
     private readonly syncQueue = new SyncQueue(() => {
-        this.runSync();
+        this.runSync().catch((err) => {
+            console.error(err);
+        });
     });
 
     /**
@@ -97,7 +99,9 @@ class AccordCLI {
             )
             .action((configPath, options) => {
                 const freq = parseInt(options.freq, 10);
-                this.run__sync(configPath, freq);
+                this.run__sync(configPath, freq).catch((err) => {
+                    console.error(err);
+                });
             });
 
         // Setup remote watcher action. This command is ran over an SSH connection by the sync initiator. It doesn't
@@ -112,14 +116,14 @@ class AccordCLI {
             .description("Run file watcher and dump changed files to stdout.")
             .action((rootPath, options) => {
                 const ignorePatterns = options.ignore
-                    ? (options.ignore as string).split(";")
+                    ? options.ignore.split(";")
                     : [];
                 this.run__watch(rootPath, ignorePatterns);
             });
 
         // Setup catch-all action.
-        program.command("*", "", { noHelp: true }).action((cmd) => {
-            console.error(makeRed(`Unknown command was provided: "${cmd}"`));
+        program.command("*", "", { noHelp: true }).action(() => {
+            console.error(makeRed(`Unknown command was provided"`));
             this.die();
         });
 
@@ -167,7 +171,9 @@ class AccordCLI {
         await this.watchLocal(config, watchIgnorePatterns);
 
         // Start remote file watcher
-        this.watchRemote(config, watchIgnorePatterns);
+        this.watchRemote(config, watchIgnorePatterns).catch((err) => {
+            console.error(err);
+        });
 
         // Periodically trigger a full tree sync
         setInterval(() => {
@@ -178,7 +184,9 @@ class AccordCLI {
         registerCleanupFn(() => {
             console.log("Closing file watchers...");
             if (this.localWatcher) {
-                this.localWatcher.close();
+                this.localWatcher.close().catch((err) => {
+                    console.error(err);
+                });
             }
 
             console.log("Closing SSH connection...");
@@ -222,8 +230,14 @@ class AccordCLI {
         // Make sure that file watchers are closed when the process exits
         registerCleanupFn(() => {
             process.stdout.write(`Closing remote file watchers...\n`);
-            watcher.close();
-            process.stdout.write(`Done.\n`);
+            watcher
+                .close()
+                .then(() => {
+                    process.stdout.write(`Done.\n`);
+                })
+                .catch((err) => {
+                    console.error(err);
+                });
         });
     }
 
@@ -396,18 +410,14 @@ class AccordCLI {
                 };
 
                 // Pipe child process stdout to main process stdout
-                if (child.stdout) {
-                    child.stdout.on("data", (data) => {
-                        writeLines(process.stdout, data);
-                    });
-                }
+                child.stdout.on("data", (data: string | Buffer) => {
+                    writeLines(process.stdout, data);
+                });
 
                 // Pipe child process stderr to main process stderr
-                if (child.stderr) {
-                    child.stderr.on("data", (data) => {
-                        writeLines(process.stdout, data);
-                    });
-                }
+                child.stderr.on("data", (data: string | Buffer) => {
+                    writeLines(process.stdout, data);
+                });
 
                 // Handle sync finish
                 child.on("close", (code) => {
@@ -422,7 +432,9 @@ class AccordCLI {
                     // If more sync actions were requested while this sync was running, run sync again.
                     if (this.syncQueue.size() > 0) {
                         setImmediate(() => {
-                            this.runSync();
+                            this.runSync().catch((err) => {
+                                console.error(err);
+                            });
                         });
                     }
                     // Resolve
@@ -437,9 +449,11 @@ class AccordCLI {
     }
 }
 
-const main = async function (argv: string[]) {
+const main = function (argv: string[]) {
     const cli = new AccordCLI(argv);
     return cli.run();
 };
 
-main(process.argv);
+main(process.argv).catch((err) => {
+    console.error(err);
+});

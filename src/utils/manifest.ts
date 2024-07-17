@@ -1,9 +1,9 @@
+import path from "node:path";
+
 import { isLeft } from "fp-ts/lib/Either";
 import * as t from "io-ts";
 import { failure } from "io-ts/lib/PathReporter";
-
-import path = require("path");
-import request = require("request-promise-native");
+import request from "request-promise-native";
 
 const NodePackageManifest = t.type({
     name: t.string,
@@ -22,7 +22,8 @@ export const getPackageInfo = function () {
     const manifestPath = path.normalize(
         path.join(__dirname, "..", "..", "package.json"),
     );
-    const rawManifest = require(manifestPath);
+    /* eslint-disable-next-line @typescript-eslint/no-var-requires */
+    const rawManifest: unknown = require(manifestPath);
     const manifest = NodePackageManifest.decode(rawManifest);
     if (isLeft(manifest)) {
         throw new Error(failure(manifest.left).join("\n"));
@@ -32,7 +33,7 @@ export const getPackageInfo = function () {
 
 export const checkForUpdates = async function () {
     const pkg = getPackageInfo();
-    const npmInfoRaw = await request({
+    const npmInfoRaw: unknown = await request({
         uri: `https://registry.npmjs.org/${pkg.name}`,
         json: true,
     });
