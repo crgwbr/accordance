@@ -97,7 +97,8 @@ const _buildUnisonConfigLine = function (
 
 export const buildUnisonConfig = function (config: IAccordanceConfig) {
     // Setup the local and remote roots
-    const remoteURL = `ssh://${config.remote.host}/${config.remote.root}`;
+    const username = config.remote.username || os.userInfo().username;
+    const remoteURL = `ssh://${username}@${config.remote.host}/${config.remote.root}`;
     const lines: string[] = [
         _buildUnisonConfigLine("root", config.local.root),
         _buildUnisonConfigLine("root", remoteURL),
