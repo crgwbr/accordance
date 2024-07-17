@@ -34,7 +34,7 @@ PKG_FILE="package.json"
 PKG_BK_FILE="${PKG_FILE}.bk"
 jq --arg VERSION "$VERSION" '.version=$VERSION' "$PKG_FILE" > "$PKG_BK_FILE"
 mv "$PKG_BK_FILE" "$PKG_FILE"
-npm ci
+npm i
 git add "$PKG_FILE" "package-lock.json"
 
 # Build
