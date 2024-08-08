@@ -23,5 +23,11 @@ repos:
     rev: "v3.3.3"
     hooks:
       - id: prettier
+        exclude: "^.git/"
+
+  - repo: https://github.com/commitizen-tools/commitizen
+    rev: v3.28.0
+    hooks:
+      - id: commitizen
 
 exclude: "^dist/"

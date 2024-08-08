@@ -1,0 +1,23 @@
+[tool.commitizen]
+name = "cz_conventional_commits"
+annotated_tag = true
+gpg_sign = true
+major_version_zero = true
+tag_format = "v$version"
+update_changelog_on_bump = true
+changelog_merge_prerelease = true
+version_provider = "npm"
+version_scheme = "semver"
+version_files = [
+    "package.json:version",
+]
+pre_bump_hooks = [
+    "npm i",
+    "npm run lint",
+    "npm run build",
+    "pre-commit run --all-files || true",
+]
+post_bump_hooks = [
+    "git push origin master $CZ_POST_CURRENT_TAG_VERSION",
+    "npm publish",
+]
