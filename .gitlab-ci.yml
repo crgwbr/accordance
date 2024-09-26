@@ -1,0 +1,22 @@
+stages:
+  - test
+
+cache:
+  key: "$CI_PROJECT_NAME"
+  paths:
+    - node_modules
+
+include:
+  - component: gitlab.com/thelabnyc/thelab-ci-components/precommit@0.1.2
+
+test:
+  stage: test
+  image: "${IMAGE}"
+  script:
+    - npm ci
+    - npm run lint
+    - npm run build
+  parallel:
+    matrix:
+      - IMAGE: node:18
+      - IMAGE: node:20
