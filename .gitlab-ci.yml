@@ -7,7 +7,7 @@ cache:
     - node_modules
 
 include:
-  - component: gitlab.com/thelabnyc/thelab-ci-components/precommit@0.1.2
+  - component: gitlab.com/thelabnyc/thelab-ci-components/precommit@0.2.0
     inputs:
       image: registry.gitlab.com/thelabnyc/python:py312-node20
 
