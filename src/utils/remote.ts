@@ -1,12 +1,10 @@
-import { ConnectConfig } from "ssh2";
-
-import ssh2 = require("ssh2");
+import { Client, ConnectConfig } from "ssh2";
 
 export const getConnection = async function (
     connection: ConnectConfig,
-): Promise<ssh2.Client> {
-    return new Promise<ssh2.Client>((resolve) => {
-        const conn = new ssh2.Client();
+): Promise<Client> {
+    return new Promise<Client>((resolve) => {
+        const conn = new Client();
         const onReady = () => {
             resolve(conn);
         };

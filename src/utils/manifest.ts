@@ -1,3 +1,4 @@
+import fs from "node:fs";
 import path from "node:path";
 
 import axios from "axios";
@@ -22,8 +23,9 @@ export const getPackageInfo = function () {
     const manifestPath = path.normalize(
         path.join(__dirname, "..", "..", "package.json"),
     );
-    /* eslint-disable-next-line @typescript-eslint/no-var-requires */
-    const rawManifest: unknown = require(manifestPath);
+    const rawManifest: unknown = JSON.parse(
+        fs.readFileSync(manifestPath, { encoding: "utf-8" }),
+    );
     const manifest = NodePackageManifest.decode(rawManifest);
     if (isLeft(manifest)) {
         throw new Error(failure(manifest.left).join("\n"));
