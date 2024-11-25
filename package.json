@@ -26,7 +26,7 @@
     "@types/ssh2": "^1.15.1",
     "prettier": "^3.3.3",
     "tsx": "^4.19.2",
-    "typescript": "^5.6.3"
+    "typescript": "^5.7.2"
   },
   "dependencies": {
     "@commander-js/extra-typings": "^12.1.0",
