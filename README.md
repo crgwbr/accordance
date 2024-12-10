@@ -171,36 +171,36 @@ These limitation are not design decisions, just limitations of the current imple
 
 ### 0.6.0 (_2023-01-12_)
 
--   Upgrade several dependencies, most notably, Chokidar.
--   Add eslint and prettier.
--   Update tsconfig options for Node >= 16
+- Upgrade several dependencies, most notably, Chokidar.
+- Add eslint and prettier.
+- Update tsconfig options for Node >= 16
 
 ### 0.5.0 (_2019-09-26_)
 
--   Upgrade several dependencies, most notably, Chokidar. This should significantly improve CPU and memory performance.
+- Upgrade several dependencies, most notably, Chokidar. This should significantly improve CPU and memory performance.
 
 ### 0.4.1 (_2019-03-25_)
 
--   Fix issue with Unison throwing a "Uncaught exception Sys_blocked_io" error in initial sync.
+- Fix issue with Unison throwing a "Uncaught exception Sys_blocked_io" error in initial sync.
 
 ### 0.4.0 (_2019-03-25_)
 
--   Improve start-up procedure by running full sync before starting file watchers
--   Add periodic syncing to catch any changes missed by the watchers.
--   Add upgrade check and warning.
+- Improve start-up procedure by running full sync before starting file watchers
+- Add periodic syncing to catch any changes missed by the watchers.
+- Add upgrade check and warning.
 
 ### 0.3.1 (_2018-11-02_)
 
--   Upgraded Typescript version.
+- Upgraded Typescript version.
 
 ### 0.3.0 (_2018-10-31_)
 
--   Improve sync performance by removing redundant directories from the sync-queue when adding a new directory.
+- Improve sync performance by removing redundant directories from the sync-queue when adding a new directory.
 
 ### 0.2.0 (_2018-07-27_)
 
--   Added remote username as a mandatory field in the config file.
+- Added remote username as a mandatory field in the config file.
 
 ### 0.1.6 (_2018-07-19_)
 
--   Initial Release.
+- Initial Release.
