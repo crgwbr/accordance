@@ -221,7 +221,11 @@ class AccordCLI {
         });
 
         // Dump change events to stdout
-        watcher.on("all", (eventType: string, filePath: string) => {
+        watcher.on("all", (eventType, filePath) => {
+            if (filePath instanceof Error) {
+                console.error(filePath);
+                return;
+            }
             const relPath = path.relative(rootPath, filePath);
             const msg = JSON.stringify(["remote", eventType, relPath]);
             process.stdout.write(`CMD: ${msg}\n`);
@@ -338,7 +342,11 @@ class AccordCLI {
             });
 
             // React to FS changes
-            watcher.on("all", (eventType: string, filePath: string) => {
+            watcher.on("all", (eventType, filePath) => {
+                if (filePath instanceof Error) {
+                    console.error(filePath);
+                    return;
+                }
                 const relPath = path.relative(config.local.root, filePath);
                 this.syncQueue.queue(config, "local", eventType, relPath);
             });
