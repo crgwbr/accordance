@@ -23,7 +23,7 @@
     "@types/js-yaml": "^4.0.9",
     "@types/request": "^2.48.12",
     "@types/request-promise-native": "^1.0.21",
-    "@types/ssh2": "^1.15.3",
+    "@types/ssh2": "^1.15.4",
     "prettier": "^3.4.2",
     "tsx": "^4.19.2",
     "typescript": "^5.7.3"
