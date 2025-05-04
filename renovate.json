@@ -4,7 +4,7 @@
     "customManagers": [
         {
             "customType": "regex",
-            "fileMatch": [".+\\.yml$"],
+            "managerFilePatterns": ["/.+\\.yml$/"],
             "matchStrings": [
                 "registry\\.gitlab\\.com\\/thelabnyc/python:(?<currentValue>[^\\s@]+)(@(?<currentDigest>sha256:[0-9a-f]+))?"
             ],
