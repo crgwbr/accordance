@@ -18,7 +18,7 @@
     "accordance": "./dist/main.js"
   },
   "devDependencies": {
-    "@thelabnyc/standards": "0.4.4",
+    "@thelabnyc/standards": "0.4.5",
     "@tsconfig/node18": "18.2.4",
     "@types/js-yaml": "4.0.9",
     "@types/request": "2.48.12",
