@@ -9,7 +9,7 @@ cache:
 include:
   - component: gitlab.com/thelabnyc/thelab-ci-components/precommit@0.4.0
     inputs:
-      image: registry.gitlab.com/thelabnyc/python:3.13.824-node20@sha256:5fd717310cef4b39d6d9d6b0d017a9495f6f95a4b5cd84af1ceea5e26bfeeada
+      image: registry.gitlab.com/thelabnyc/python:3.13.826-node20@sha256:b069c92f0b641ddeee0e602a8a0b84942aa2891df3e35c967a15afc8755ed796
 
 test:
   stage: test
