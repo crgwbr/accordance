@@ -21,7 +21,7 @@
     "@thelabnyc/standards": "0.4.7",
     "@tsconfig/node18": "18.2.4",
     "@types/js-yaml": "4.0.9",
-    "@types/request": "2.48.12",
+    "@types/request": "2.48.13",
     "@types/request-promise-native": "1.0.21",
     "@types/ssh2": "1.15.5",
     "prettier": "3.6.2",
