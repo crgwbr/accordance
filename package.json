@@ -25,7 +25,7 @@
     "@types/request-promise-native": "1.0.21",
     "@types/ssh2": "1.15.5",
     "prettier": "3.6.2",
-    "tsx": "4.20.3",
+    "tsx": "4.20.4",
     "typescript": "5.9.2"
   },
   "dependencies": {
