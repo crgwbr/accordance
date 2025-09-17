@@ -10,12 +10,15 @@
     "build": "rm -rf ./dist && tsc -p tsconfig.json",
     "develop": "tsx ./src/main.ts"
   },
-  "repository": "git@github.com:crgwbr/accordance.git",
+  "repository": {
+    "type": "git",
+    "url": "git+https://gitlab.com/thelabnyc/accordance.git"
+  },
   "author": "Craig Weber <crgwbr@gmail.com>",
   "license": "ISC",
   "private": false,
   "bin": {
-    "accordance": "./dist/main.js"
+    "accordance": "dist/main.js"
   },
   "devDependencies": {
     "@thelabnyc/standards": "0.4.8",

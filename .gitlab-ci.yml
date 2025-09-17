@@ -1,5 +1,13 @@
 stages:
   - test
+  - release
+
+variables:
+  # We have to disable sigstore for now since NPM currently only supports
+  # provenance when publishing from a gitlab-hosted runner. Hopefully we can
+  # enable this in the future once they drop this limitation (which should be
+  # possible since PyPI has no such limitation on their use of sigstore).
+  NPM_CONFIG_PROVENANCE: "false"
 
 cache:
   key: "$CI_PROJECT_NAME"
@@ -7,9 +15,11 @@ cache:
     - node_modules
 
 include:
-  - component: gitlab.com/thelabnyc/thelab-ci-components/precommit@0.4.0
+  - component: gitlab.com/thelabnyc/thelab-ci-components/precommit@0.5.0
     inputs:
-      image: registry.gitlab.com/thelabnyc/python:3.13.961-node20@sha256:c63e10644379e04e6763a8969e7023ba5c6798505b3d219464e42faadf701e46
+      image: registry.gitlab.com/thelabnyc/python:3.13.960-node24@sha256:9cb82ee53bc8ad2d7fea12d10f6e3583b6a0924dbaab4bb51b52605396017475
+  - component: gitlab.com/thelabnyc/thelab-ci-components/publish-gitlab-release@0.5.0
+  - component: gitlab.com/thelabnyc/thelab-ci-components/publish-to-npm@0.5.0
 
 test:
   stage: test
@@ -20,5 +30,5 @@ test:
     - npm run build
   parallel:
     matrix:
-      - IMAGE: node:18
-      - IMAGE: node:20
+      - IMAGE: node:22
+      - IMAGE: node:24
