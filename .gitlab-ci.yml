@@ -17,7 +17,7 @@ cache:
 include:
   - component: gitlab.com/thelabnyc/thelab-ci-components/precommit@0.5.1
     inputs:
-      image: registry.gitlab.com/thelabnyc/python:3.13.967-node24@sha256:b406c8237648752b37516a8c90738449063e62cb735c9bcc057f1ff01f794b41
+      image: registry.gitlab.com/thelabnyc/python:3.13.970-node24@sha256:c651f15d5cb1e7d950fa3f0e619eadad377bdb5007cfdb3f42ca05025e7923d5
   - component: gitlab.com/thelabnyc/thelab-ci-components/publish-gitlab-release@0.5.1
   - component: gitlab.com/thelabnyc/thelab-ci-components/publish-to-npm@0.5.1
 
