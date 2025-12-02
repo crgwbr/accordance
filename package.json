@@ -34,7 +34,7 @@
   "dependencies": {
     "@commander-js/extra-typings": "^14.0.0",
     "axios": "^1.8.4",
-    "chokidar": "^4.0.3",
+    "chokidar": "^5.0.0",
     "colors": "^1.4.0",
     "commander": "^14.0.0",
     "fp-ts": "^2.16.10",
