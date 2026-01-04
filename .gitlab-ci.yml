@@ -23,7 +23,7 @@ include:
   - component: gitlab.com/thelabnyc/thelab-ci-components/review@0.6.2
   - component: gitlab.com/thelabnyc/thelab-ci-components/precommit@0.6.2
     inputs:
-      image: registry.gitlab.com/thelabnyc/python:3.14-node24@sha256:11f748df1c07b69831ecb5604b6f86abed2b6c0ad55ee2675e991165549d04ca
+      image: registry.gitlab.com/thelabnyc/python:3.14-node24@sha256:82e53abeb0f6619d9fad592d2817931683965dbbcb6c8928b581946ade8e6074
   - component: gitlab.com/thelabnyc/thelab-ci-components/publish-gitlab-release@0.6.2
   - component: gitlab.com/thelabnyc/thelab-ci-components/publish-to-npm@0.6.2
 
