@@ -20,12 +20,12 @@ cache:
     - node_modules
 
 include:
-  - component: gitlab.com/thelabnyc/thelab-ci-components/review@0.6.2
-  - component: gitlab.com/thelabnyc/thelab-ci-components/precommit@0.6.2
+  - component: gitlab.com/thelabnyc/thelab-ci-components/review@0.7.0
+  - component: gitlab.com/thelabnyc/thelab-ci-components/precommit@0.7.0
     inputs:
       image: registry.gitlab.com/thelabnyc/python:3.14-node24@sha256:f728356707568dbac5640dac5119d4bccfe254b2b55b2fc9ba2ea5b70745da23
-  - component: gitlab.com/thelabnyc/thelab-ci-components/publish-gitlab-release@0.6.2
-  - component: gitlab.com/thelabnyc/thelab-ci-components/publish-to-npm@0.6.2
+  - component: gitlab.com/thelabnyc/thelab-ci-components/publish-gitlab-release@0.7.0
+  - component: gitlab.com/thelabnyc/thelab-ci-components/publish-to-npm@0.7.0
 
 test:
   stage: test
