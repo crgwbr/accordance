@@ -26,7 +26,7 @@ repos:
         exclude: "^.git/"
 
   - repo: https://github.com/commitizen-tools/commitizen
-    rev: v4.13.5
+    rev: v4.13.6
     hooks:
       - id: commitizen
 
