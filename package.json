@@ -30,7 +30,7 @@
     "@types/request": "2.48.13",
     "@types/request-promise-native": "1.0.21",
     "@types/ssh2": "1.15.6",
-    "prettier": "3.9.7",
+    "prettier": "3.9.8",
     "tsx": "4.23.13",
     "typescript": "6.0.3"
   },
