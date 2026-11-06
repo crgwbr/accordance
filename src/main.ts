@@ -421,23 +421,21 @@ class AccordCLI {
 
                 // Handle sync finish
                 child.on("close", (code) => {
-                    // Unset sync locks
                     this.syncIsRunning = false;
-                    // Log any errors
                     if (code !== 0) {
                         console.log(makeRed(`Unison exited with code ${code}`));
-                        resolve();
-                        return;
                     }
-                    // If more sync actions were requested while this sync was running, run sync again.
+                    // Always drain anything queued while this sync ran; back off briefly after a failure.
                     if (this.syncQueue.size() > 0) {
-                        setImmediate(() => {
-                            this.runSync().catch((err) => {
-                                console.error(err);
-                            });
-                        });
+                        setTimeout(
+                            () => {
+                                this.runSync().catch((err) =>
+                                    console.error(err),
+                                );
+                            },
+                            code === 0 ? 0 : 2000,
+                        );
                     }
-                    // Resolve
                     resolve();
                 });
             } catch (e) {

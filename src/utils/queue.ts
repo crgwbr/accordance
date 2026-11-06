@@ -94,7 +94,7 @@ export class SyncQueue {
      * Get the size of the sync queue
      */
     size() {
-        return this.queue.length;
+        return this._queue.length;
     }
 
     private isSubDirectory(parent: string, child: string) {
